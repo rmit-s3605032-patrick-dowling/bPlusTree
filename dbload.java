@@ -92,6 +92,7 @@ public class dbload {
             endPage(os, pageSize - bytesSinceLastPage);
             os.close();
             long endTime = System.currentTimeMillis();
+            // prints statistics at the end.
             System.out.println("Number of Records Inserted: " + (lineNumber - 1));
             System.out.println("Number of Pages Used: " + currentPageNumber);
             System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
@@ -145,7 +146,8 @@ public class dbload {
     {
         int recordSize = 0;
         try
-        {           
+        {      
+            // writes each attribute with a field seperator
 
             recordSize += writeAttribute(os, dataEntry.getDeviceID());
             recordSize += endOfString(os);
@@ -196,6 +198,7 @@ public class dbload {
         return recordSize;
     }
 
+    // writes attribute and returns the size of the attribute.
     public int writeAttribute(OutputStream os, byte[] value) throws IOException
     {
         try
@@ -209,6 +212,7 @@ public class dbload {
         } 
     }
 
+    // adds # to end of string
     public int endOfString(OutputStream os) throws IOException
     {
         byte eosBytes = '#';
@@ -216,6 +220,7 @@ public class dbload {
         return 1;
     }
 
+    // prints $ to end of page.
     public void endPage(OutputStream os, int remainingBytes) throws IOException
     {
         byte[] eofBytes = new byte[remainingBytes];

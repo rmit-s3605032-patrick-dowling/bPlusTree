@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 
+import javax.lang.model.util.ElementScanner6;
+
 public class dbquery
 {
 
@@ -21,11 +23,13 @@ public class dbquery
 
         int pageSize = 0;
         String text = null;
+        String type = "";
         
         try
         {
-            text = args[0];
-            pageSize = Integer.parseInt(args[1]);
+            type = args[0];
+            text = args[1];
+            pageSize = Integer.parseInt(args[2]);
         }
         catch (ArrayIndexOutOfBoundsException oobException)
         {
@@ -38,16 +42,29 @@ public class dbquery
 
         String fileName = "heap." + pageSize;
 
-        queryHeap(text, fileName, pageSize);
+        if(type.equalsIgnoreCase("range") || type.equalsIgnoreCase("equality"))
+        {
+            queryHeap(type, text, fileName, pageSize);
+        }
+        else
+        {
+            invalidInput();
+            System.exit(1);
+        }
     }
 
     public void invalidInput()
     {
-        System.out.println("Please enter the correct syntax: \njava dbquery [text] [pageSize]");
+        System.out.println("Please enter the correct syntax: \njava dbquery [range/equality] [text] [pageSize]");
+        System.out.println("Syntax for range should be as follows:");
+        System.out.println("java dbquery range gt500 4096");
+        System.out.println("java dbquery range lt500 4096\n");
+        System.out.println("Where lt represents less than, gt represents greater than");
+        System.out.println("Please keep in mind the application only indexes on the durationSeconds field");
         System.exit(1);
     }
 
-    public void queryHeap(String text, String fileName, int pageSize)
+    public void queryHeap(String type, String text, String fileName, int pageSize)
     {
         try
         {
@@ -56,7 +73,7 @@ public class dbquery
             int pageNumber = 1;
             while( input.available() > 0) 
             {
-                readInPage(input, pageNumber, pageSize, text);
+                readInPage(input, pageNumber, type, pageSize, text);
                 pageNumber++;
             }
             long endTime = System.currentTimeMillis();
@@ -70,29 +87,34 @@ public class dbquery
         
     }
 
-    public void readInPage(BufferedInputStream input, int pageNumber, int pageSize, String text) throws IOException
+    public void readInPage(BufferedInputStream input, int pageNumber, String type, int pageSize, String text) throws IOException
     {
         byte[] line = input.readNBytes(pageSize);
         byte[] value = new byte[64];
         int valueNumber = 0;
         int countSinceLastValue = 0;
         Data data = new Data();
+        // used to store all matches
+        ArrayList<Data> matches = new ArrayList();
+        // flag is just to prevent the query to be run multiple times when it is still gathering characters for deviceID.
+        boolean flag = false;
         
         for (int i = 0; i < pageSize; i++)
         {
-            if (valueNumber % 13 == 0 && valueNumber != 0)
+            // will query every 12 elements of the heap.
+            if (valueNumber % 13 == 0 && valueNumber != 0 && flag == false)
             {
-                if (runQuery(text, data))
-                {
-                    break;
-                }
+                matches = runQuery(matches, type, text, data);
+                flag = true;
             }
+            // will search for the last value of the line, otherwise keep appending to the value
             if (line[i] == '#')
             {
                 countSinceLastValue = 0;
                 data = retrieveValue(data, value, valueNumber);
                 valueNumber++;
                 value = emptyValue(value);
+                flag = false;
             }
             // end of page
             else if (line[i] == '$')
@@ -104,10 +126,7 @@ public class dbquery
                 value[countSinceLastValue] = line[i];
                 countSinceLastValue++;
             }
-            
-            
         }
-
     }
 
     public Data retrieveValue(Data data, byte[] value, int valueNumber)
@@ -192,20 +211,47 @@ public class dbquery
         return value;
     }
 
-    public Boolean runQuery(String text, Data data)
+    public ArrayList<Data> runQuery(ArrayList<Data> matches, String type, String text, Data data)
     {
-        String dID= String.valueOf(data.deviceID);
-        String DA_NAME = dID + data.arrivalTime;
+        if (type.equalsIgnoreCase("range"))
+        {
+            return rangeQuery(matches, text, data);
+        }
+        {
+            return equalitySearch(matches, text, data);
+        }
+    }
+
+    public ArrayList<Data> equalitySearch(ArrayList<Data> matches, String text, Data data)
+    {
+        String durationSeconds = String.valueOf(data.durationSeconds);
         
-        if (DA_NAME.trim().equals(text.trim()))
+        if (durationSeconds.trim().equalsIgnoreCase(text.trim()))
         {
-            printDataEntry(data);
-            return true;
+            matches.add(data);
         }
-        else
+        return matches;
+    }
+
+    public ArrayList<Data> rangeQuery(ArrayList<Data> matches, String text, Data data)
+    {
+        long userInput = data.durationSeconds;
+
+        if (text.substring(0, 1).equalsIgnoreCase("gt"))
         {
-            return false;
+            if (durationSeconds > userInput)
+            {
+                matches.add(data);
+            }
         }
+        else if (text.substring(0, 1).equalsIgnoreCase("lt"))
+        {
+            if (durationSeconds < userInput)
+            {
+                matches.add(data);
+            }
+        }
+        return matches;
     }
 
     public void printDataEntry(Data d)

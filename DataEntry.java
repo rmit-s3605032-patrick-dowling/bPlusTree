@@ -1,22 +1,22 @@
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 
+// class used to store the Data prior to entry.
 public class DataEntry {
 
-    private byte[] deviceID; // 4 Bytes
-    private byte[] arrivalTime; // 32 Bytes
-    private byte[] departureTime; //32 Bytes
-    private byte[] durationSeconds; // 8 Bytes
-    private byte[] streetMarker; // 16 Bytes
-    private byte[] sign; // 16 Bytes
-    private byte[] area; // 16 Bytes
-    private byte[] streetID; // 4 Bytes
-    private byte[] streetName; // 16 Bytes
-    private byte[] betweenStreet1; // 16 Bytes
-    private byte[] betweenStreet2; // 16 Bytes
-    private byte[] sideOfStreet; // 4 Bytes
-    private byte inViolation; // 1 Byte
-    // total of 309 bytes per record
+    private byte[] deviceID;
+    private byte[] arrivalTime;
+    private byte[] departureTime;
+    private byte[] durationSeconds;
+    private byte[] streetMarker;
+    private byte[] sign;
+    private byte[] area;
+    private byte[] streetID;
+    private byte[] streetName;
+    private byte[] betweenStreet1; 
+    private byte[] betweenStreet2;
+    private byte[] sideOfStreet;
+    private byte inViolation;
 
     public byte[] getDeviceID() {
         return deviceID;
@@ -27,10 +27,6 @@ public class DataEntry {
         buffer.putInt(deviceID);
         this.deviceID = buffer.array();
     }
-
-    /*public void setDeviceID(byte[] deviceID) {
-        this.deviceID = deviceID;
-    }*/
 
     public byte[] getArrivalTime() {
         return arrivalTime;
@@ -118,10 +114,6 @@ public class DataEntry {
         this.streetID = buffer.array();
     }
 
-    /*public void setStreetID(byte[] streetID) {
-        this.streetID = streetID;
-    }*/
-
     public byte[] getStreetName() {
         return streetName;
     }
@@ -167,10 +159,6 @@ public class DataEntry {
         buffer.putInt(sideOfStreet);
         this.sideOfStreet = buffer.array();
     }
-
-    /*public void setSideOfStreet(byte[] sideOfStreet) {
-        this.sideOfStreet = sideOfStreet;
-    }*/
 
     public byte getInViolation() {
         return inViolation;
