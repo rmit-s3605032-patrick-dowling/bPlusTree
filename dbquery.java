@@ -6,8 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
-
-import javax.lang.model.util.ElementScanner6;
+import java.util.ArrayList;
 
 public class dbquery
 {
@@ -217,6 +216,7 @@ public class dbquery
         {
             return rangeQuery(matches, text, data);
         }
+        else
         {
             return equalitySearch(matches, text, data);
         }
@@ -235,21 +235,30 @@ public class dbquery
 
     public ArrayList<Data> rangeQuery(ArrayList<Data> matches, String text, Data data)
     {
-        long userInput = data.durationSeconds;
-
-        if (text.substring(0, 1).equalsIgnoreCase("gt"))
+        long durationSeconds = data.durationSeconds;
+        try
         {
-            if (durationSeconds > userInput)
+            long userInput = (long) Long.parseLong(text);
+
+            if (text.substring(0, 1).equalsIgnoreCase("gt"))
             {
-                matches.add(data);
+                if (userInput > durationSeconds)
+                {
+                    matches.add(data);
+                }
+                else if (text.substring(0, 1).equalsIgnoreCase("lt"))
+                {
+                    if (userInput < durationSeconds)
+                    {
+                        matches.add(data);
+                    }
+                }
             }
         }
-        else if (text.substring(0, 1).equalsIgnoreCase("lt"))
+        catch(NumberFormatException nfe)
         {
-            if (durationSeconds < userInput)
-            {
-                matches.add(data);
-            }
+            System.out.println("Text submitted is not a long value.");
+            System.exit(1);
         }
         return matches;
     }
