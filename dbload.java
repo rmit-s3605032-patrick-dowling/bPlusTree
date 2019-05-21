@@ -56,7 +56,7 @@ public class dbload {
             int lineNumber=0;
             int currentPageNumber = 1;
             final int maxRecordSize = 309;
-            int bytesSinceLastPage = 0;
+            int pageOffset = 0;
             String fileName = "heap." + pageSize;
             BufferedReader reader = new BufferedReader(new FileReader(new File(datafileName)));
             DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName));
@@ -76,20 +76,20 @@ public class dbload {
                     DataEntry dataEntry = new DataEntry();
                     
                     createDataEntry(dataSplit, dataEntry);
-                    bytesSinceLastPage += writeDataEntry(os, dataEntry, pageSize);
+                    pageOffset += writeDataEntry(os, dataEntry, pageSize);
 
-                    if (bytesSinceLastPage +  maxRecordSize > pageSize)
+                    if (pageOffset +  maxRecordSize > pageSize)
                     {
                         // finish up page, add bytes to fill
-                        endPage(os, pageSize - bytesSinceLastPage);
+                        endPage(os, pageSize - pageOffset);
                         ++currentPageNumber; 
                         
-                        bytesSinceLastPage = 0;
+                        pageOffset = 0;
                     }
                     
                 }
             }
-            endPage(os, pageSize - bytesSinceLastPage);
+            endPage(os, pageSize - pageOffset);
             os.close();
             long endTime = System.currentTimeMillis();
             // prints statistics at the end.
@@ -144,50 +144,50 @@ public class dbload {
 
     public int writeDataEntry(OutputStream os, DataEntry dataEntry, int pageSize)
     {
-        int recordSize = 0;
+        int offset = 0;
         try
         {      
             // writes each attribute with a field seperator
 
-            recordSize += writeAttribute(os, dataEntry.getDeviceID());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getDeviceID());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getArrivalTime());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getArrivalTime());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getDepartureTime());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getDepartureTime());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getDurationSeconds());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getDurationSeconds());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getStreetMarker());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getStreetMarker());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getSign());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getSign());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getArea());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getArea());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getStreetID());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getStreetID());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getStreetName());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getStreetName());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getBetweenStreet1());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getBetweenStreet1());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getBetweenStreet2());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getBetweenStreet2());
+            offset += endOfString(os);
 
-            recordSize += writeAttribute(os, dataEntry.getSideOfStreet());
-            recordSize += endOfString(os);
+            offset += writeAttribute(os, dataEntry.getSideOfStreet());
+            offset += endOfString(os);
 
             os.write(dataEntry.getInViolation());
-            recordSize++;
-            recordSize += endOfString(os);
+            offset++;
+            offset += endOfString(os);
         }
         catch (IOException ioe)
         {
@@ -195,7 +195,7 @@ public class dbload {
             System.exit(1);
         }
 
-        return recordSize;
+        return offset;
     }
 
     // writes attribute and returns the size of the attribute.
