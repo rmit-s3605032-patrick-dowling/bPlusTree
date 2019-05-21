@@ -1,3 +1,6 @@
+package bPlusTree;
+
+import data.*;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -6,11 +9,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class bPlusLoad {
+public class BPlusLoad {
     public static void main(String args[])
     {
-        dbload dbload = new dbload();
-        dbload.checkArgs(args);
+        BPlusLoad bPlusLoad = new BPlusLoad();
+        bPlusLoad.checkArgs(args);
     }
 
     public void checkArgs(String args[])

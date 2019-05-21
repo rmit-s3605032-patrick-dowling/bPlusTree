@@ -1,3 +1,5 @@
+package data;
+
 // class used to store data, used for querying
 public class Data {
 
