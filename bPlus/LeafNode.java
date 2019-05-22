@@ -1,6 +1,6 @@
-package bPlusTree;
+package bPlusTree.bPlus;
 
-import data.*;
+import bPlusTree.data.*;
 
 public class LeafNode extends Node
 {

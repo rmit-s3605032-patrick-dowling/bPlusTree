@@ -1,4 +1,6 @@
-package heapFile;
+package bPlusTree.heapFile;
+
+import bPlusTree.data.*;
 
 import java.lang.IndexOutOfBoundsException;
 import java.lang.NumberFormatException;
@@ -13,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import data.*;
 
 public class dbload {
     public static void main(String args[])
