@@ -11,13 +11,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class BPlusLoad {
-    public static void main(String args[])
+
+    private DataStore ds = new DataStore();
+
+    public static void main(String[] args)
     {
         BPlusLoad bPlusLoad = new BPlusLoad();
         bPlusLoad.checkArgs(args);
     }
 
-    public void checkArgs(String args[])
+    private void checkArgs(String[] args)
     {
         int pageSize = 0;
         String datafileName = null;
@@ -34,12 +37,7 @@ public class BPlusLoad {
                 invalidInput();
             }
         }
-        catch (ArrayIndexOutOfBoundsException oobException)
-        {
-            invalidInput();
-        }
-        catch (NumberFormatException nfe)
-        {
+        catch (Exception e) {
             invalidInput();
         }
 
@@ -47,13 +45,13 @@ public class BPlusLoad {
 
     }
 
-    public void invalidInput()
+    private void invalidInput()
     {
         System.out.println("Please enter the correct syntax: \njava bPlusLoad -p [pagesize] [datafile]");
         System.exit(1);
     }
 
-    public void writeData(int pageSize, String dataFileName)
+    private void writeData(int pageSize, String dataFileName)
     {
         try 
         {
@@ -69,29 +67,27 @@ public class BPlusLoad {
             for (String data = reader.readLine(); data != null; data = reader.readLine(), lineNumber++)
             {
                 // used to skip the line of headers
-                if (lineNumber == 0)
-                {
-                    continue;
-                }
-                else
+                if (lineNumber != 0)
                 {
                     String[] dataSplit = data.split(",");
-                    
+
                     DataEntry dataEntry = new DataEntry();
-                    
-                    createDataEntry(dataSplit, dataEntry);
-                    pageOffset += writeDataEntry(os, dataEntry, pageSize, currentPageNumber, pageOffset);
+
+                    createDataEntry(dataSplit, dataEntry, currentPageNumber, pageOffset);
+                    pageOffset += writeDataEntry(os, dataEntry, pageOffset);
 
                     if (pageOffset +  maxRecordSize > pageSize)
                     {
                         // finish up page, add bytes to fill
                         endPage(os, pageSize - pageOffset);
-                        ++currentPageNumber; 
-                        
+                        ++currentPageNumber;
+
                         pageOffset = 0;
                     }
                 }
             }
+
+            bulkLoad();
             endPage(os, pageSize - pageOffset);
             os.close();
             long endTime = System.currentTimeMillis();
@@ -107,8 +103,12 @@ public class BPlusLoad {
         }
     }
 
-    public void createDataEntry(String[] dataSplit, DataEntry dataEntry)
+    private void createDataEntry(String[] dataSplit, DataEntry dataEntry, int pageNumber, int recordOffset)
     {
+        // add index to the datastore
+        long durationSeconds = Long.parseLong(dataSplit[3]);
+        ds.addIndex(new Index(durationSeconds, pageNumber, recordOffset));
+
         // set device ID
         dataEntry.setDeviceID(Integer.parseInt(dataSplit[0]));
         // set arrival time
@@ -116,7 +116,7 @@ public class BPlusLoad {
         // set departure time
         dataEntry.setDepartureTime(dataSplit[2]);
         // set duration seconds
-        if (dataSplit[3] != ""){
+        if (!dataSplit[3].equals("")){
             dataEntry.setDurationSeconds(Long.parseLong(dataSplit[3]));
         }
         // set street marker
@@ -139,7 +139,7 @@ public class BPlusLoad {
         dataEntry.setInViolation(dataSplit[12].charAt(0));
     }
 
-    public int writeDataEntry(OutputStream os, DataEntry dataEntry, int pageSize, int pageNumber, int offset)
+    private int writeDataEntry(OutputStream os, DataEntry dataEntry, int offset)
     {
         try
         {      
@@ -185,8 +185,6 @@ public class BPlusLoad {
             os.write(dataEntry.getInViolation());
             offset++;
             offset += endOfString(os);
-
-            Index index = new Index(dataEntry.getDurationSeconds(), pageNumber, recordOffset);
         }
 
 
@@ -199,7 +197,7 @@ public class BPlusLoad {
     }
 
     // writes attribute and returns the size of the attribute.
-    public int writeAttribute(OutputStream os, byte[] value) throws IOException
+    private int writeAttribute(OutputStream os, byte[] value) throws IOException
     {
         try
         {
@@ -213,7 +211,7 @@ public class BPlusLoad {
     }
 
     // adds # to end of string
-    public int endOfString(OutputStream os) throws IOException
+    private int endOfString(OutputStream os) throws IOException
     {
         byte eosBytes = '#';
         os.write(eosBytes);
@@ -221,7 +219,7 @@ public class BPlusLoad {
     }
 
     // prints $ to end of page.
-    public void endPage(OutputStream os, int remainingBytes) throws IOException
+    private void endPage(OutputStream os, int remainingBytes) throws IOException
     {
         byte[] eofBytes = new byte[remainingBytes];
         for (int i = 0; i < eofBytes.length; i++)
@@ -231,4 +229,14 @@ public class BPlusLoad {
         os.write(eofBytes);
     }
 
+    private void bulkLoad()
+    {
+        ExternalMergeSort ems = new ExternalMergeSort(ds.getIndexes());
+
+        int rightmost = ds.getIndexes().size() - 1;
+
+        ems.sort(ds.getIndexes(), 0, rightmost);
+
+        
+    }
 }
