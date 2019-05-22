@@ -142,9 +142,7 @@ public class BPlusLoad {
     private int writeDataEntry(OutputStream os, DataEntry dataEntry, int offset)
     {
         try
-        {      
-            int recordOffset = offset;
-
+        {
             // writes each attribute with a field seperator
             offset += writeAttribute(os, dataEntry.getDeviceID());
             offset += endOfString(os);
@@ -232,11 +230,35 @@ public class BPlusLoad {
     private void bulkLoad()
     {
         ExternalMergeSort ems = new ExternalMergeSort(ds.getIndexes());
-
+        // last value in the list to be sorted
         int rightmost = ds.getIndexes().size() - 1;
 
+        // runs merge sort to get all indexes in order
         ems.sort(ds.getIndexes(), 0, rightmost);
 
-        
+        BPlusTree bPlusTree = new BPlusTree();
+
+        int indexLoaded = 0;
+
+        // initialises the leaf node container (will be used for all leaf nodes)
+        LeafNode node = new LeafNode();
+
+        // loops through all value in the datastore
+        for (Index nodeValue : ds.getIndexes())
+        {
+            /* as the degree is the number of values the node can hold, this will calculate when a new leaf node is
+            needed and is also used as the index for the array to insert the Node into*/
+            int arrayIndex = indexLoaded % bPlusTree.getDegree();
+            if (arrayIndex == 0)
+            {
+                // points to the next node (singly linked list)
+                LeafNode tempNode;
+                tempNode = node;
+                node = new LeafNode();
+                tempNode.setNextNode(node);
+            }
+            node.addValue(nodeValue, arrayIndex);
+            indexLoaded++;
+        }
     }
 }
