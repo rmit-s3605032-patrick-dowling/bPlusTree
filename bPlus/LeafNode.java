@@ -1,4 +1,4 @@
-package bPlusTree.bPlus;
+package bPlus;
 
 public class LeafNode extends Node {
     private Node nextNode;

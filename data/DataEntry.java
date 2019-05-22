@@ -1,4 +1,4 @@
-package bPlusTree.data;
+package data;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;

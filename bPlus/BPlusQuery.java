@@ -1,6 +1,6 @@
-package bPlusTree.bPlus;
+package bPlus;
 
-import bPlusTree.data.*;
+import data.*;
 
 public class BPlusQuery {
     

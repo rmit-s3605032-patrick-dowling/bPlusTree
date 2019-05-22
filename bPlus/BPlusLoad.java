@@ -1,6 +1,6 @@
-package bPlusTree.bPlus;
+package bPlus;
 
-import bPlusTree.data.*;
+import data.*;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

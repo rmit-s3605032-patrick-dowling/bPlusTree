@@ -1,6 +1,6 @@
-package bPlusTree.heapFile;
+package heapFile;
 
-import bPlusTree.data.*;
+import data.*;
 
 import java.lang.IndexOutOfBoundsException;
 import java.lang.NumberFormatException;

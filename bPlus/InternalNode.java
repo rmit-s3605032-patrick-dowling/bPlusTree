@@ -1,4 +1,4 @@
-package bPlusTree.bPlus;
+package bPlus;
 
 public class InternalNode extends Node
 {
