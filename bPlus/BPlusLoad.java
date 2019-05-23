@@ -74,9 +74,9 @@ public class BPlusLoad {
                     DataEntry dataEntry = new DataEntry();
 
                     createDataEntry(dataSplit, dataEntry, currentPageNumber, pageOffset);
-                    pageOffset += writeDataEntry(os, dataEntry, pageOffset);
+                    pageOffset += writeDataEntry(os, dataEntry, pageSize);
 
-                    if (pageOffset +  maxRecordSize > pageSize)
+                    if (maxRecordSize > pageSize)
                     {
                         // finish up page, add bytes to fill
                         endPage(os, pageSize - pageOffset);
