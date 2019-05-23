@@ -331,3 +331,4 @@ ASALocalRun/
 
 # Java class files
 *.class/
+heap.4096

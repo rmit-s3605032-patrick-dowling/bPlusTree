@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class DataStore {
 
-    private ArrayList<Index> indexes;
+    private ArrayList<Index> indexes = new ArrayList<>();
 
     public ArrayList<Index> getIndexes() {
         return indexes;
