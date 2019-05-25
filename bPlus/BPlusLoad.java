@@ -95,7 +95,7 @@ public class BPlusLoad {
                 }
             }
 
-            bulkLoad();
+            var btree = new BPlusTree(ds);
 //            endPage(os, pageSize - pageOffset);
 //            os.close();
 
@@ -237,83 +237,4 @@ public class BPlusLoad {
         os.write(eofBytes);
     }
 
-    private void bulkLoad()
-    {
-        System.out.println("Running BULK LOAD...");
-
-        ExternalMergeSort ems = new ExternalMergeSort(ds.getIndexes());
-        // last value in the list to be sorted
-        int rightmost = ds.getIndexes().size() - 1;
-
-        System.out.println("First 10...");
-        var indexes = ds.getIndexes();
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(indexes.get(i).getDurationSeconds());
-        }
-
-        // runs merge sort to get all indexes in order
-        System.out.println("Sorting...");
-        ems.sort(indexes, 0, rightmost);
-
-        System.out.println("First 10...");
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(indexes.get(i).getDurationSeconds());
-        }
-
-        var bPlusTree = new BPlusTree();
-        var node = bPlusTree.getFirstLeaf();
-
-        int indexLoaded = 0;
-
-        // loops through all values in the data store
-        for (var index : indexes)
-        {
-            /* as the degree is the number of values the node can hold, this will calculate when a new leaf node is
-            needed and is also used as the index for the array to insert the Node into*/
-            int arrayIndex = indexLoaded++ % BPlusTree.Order;
-            if (arrayIndex == 0)
-            {
-                // points to the next node (singly linked list)
-                var tempNode = node;
-                node = new LeafNode();
-                tempNode.setNextNode(node);
-            }
-            node.addValue(index, arrayIndex);
-        }
-
-        // rm empty node, from start:
-        bPlusTree.setFirstLeaf(bPlusTree.getFirstLeaf().getNextNode());
-
-        System.out.println("First 12...");
-        node = bPlusTree.getFirstLeaf();
-        for (int i = 0; i < 4; ++i) { // 4*3 = 12
-
-            for (var val : node.getValues()) {
-                System.out.println(val.getDurationSeconds());
-            }
-
-            node = node.getNextNode();
-
-        }
-
-        System.out.println("Leaf count: " + bPlusTree.getLeafCount());
-
-        //Here we go...
-
-        // LEAF LOOP:
-        node = bPlusTree.getFirstLeaf();
-        while (node != null) {
-
-            var root = bPlusTree.getRootNode();
-
-//            for (root.g) {
-//
-//            }
-
-
-            node = node.getNextNode();
-        }
-
-
-    }
 }

@@ -12,8 +12,8 @@ public class LeafNode extends Node {
         return nextNode;
     }
 
-    public LeafNode() {
-
+    public LeafNode(Index[] values) {
+        this.values = values;
     }
 
 }
