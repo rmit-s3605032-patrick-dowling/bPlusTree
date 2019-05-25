@@ -300,5 +300,30 @@ public class BPlusLoad {
 
         System.out.println("Leaf count: " + bPlusTree.getLeafCount());
 
+        //Here we go...
+
+        // LEAF LOOP:
+        node = bPlusTree.getFirstLeaf();
+        while (node != null) {
+
+            var root = bPlusTree.getRootNode();
+
+//            for (root.g) {
+//
+//            }
+
+
+            node = node.getNextNode();
+        }
+
+
+        var counter = 1666667;
+
+        while (counter > 0) {
+            System.out.println("HEIGHT: " + counter);
+            counter = counter / 4;
+        }
+
+
     }
 }

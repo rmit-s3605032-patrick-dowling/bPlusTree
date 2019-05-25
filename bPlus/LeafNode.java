@@ -8,19 +8,8 @@ public class LeafNode extends Node {
     {
         this.nextNode = nextNode;
     }
-
     public LeafNode getNextNode() {
         return nextNode;
-    }
-
-    private Index[] values = new Index[BPlusTree.Degree];
-
-    public Index[] getValues() {
-        return values;
-    }
-
-    public void addValue(Index value, int index) {
-        this.values[index] = value;
     }
 
     public LeafNode() {

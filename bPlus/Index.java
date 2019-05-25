@@ -9,7 +9,6 @@ public class Index
     // offset of the page
     private int offset;
 
-
     public Index(long durationSeconds, int page, int offset)
     {
         this.durationSeconds = durationSeconds;
