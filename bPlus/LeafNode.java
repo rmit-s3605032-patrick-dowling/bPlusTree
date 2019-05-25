@@ -1,9 +1,10 @@
 package bPlus;
 
 public class LeafNode extends Node {
-    private Node nextNode;
 
-    public void setNextNode(Node nextNode)
+    private LeafNode nextNode;
+
+    public void setNextNode(LeafNode nextNode)
     {
         this.nextNode = nextNode;
     }
@@ -22,5 +23,8 @@ public class LeafNode extends Node {
         this.values[index] = value;
     }
 
+    public LeafNode() {
+
+    }
 
 }

@@ -59,9 +59,9 @@ public class BPlusLoad {
             int currentPageNumber = 1;
             final int maxRecordSize = 309;
             int pageOffset = 0;
-            String fileName = "heap." + pageSize;
+//            String fileName = "heap." + pageSize;
             BufferedReader reader = new BufferedReader(new FileReader(new File(dataFileName)));
-            DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName));
+//            DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName));
             long startTime = System.currentTimeMillis();
 
             for (String data = reader.readLine(); data != null; data = reader.readLine(), lineNumber++)
@@ -71,25 +71,35 @@ public class BPlusLoad {
                 {
                     String[] dataSplit = data.split(",");
 
-                    DataEntry dataEntry = new DataEntry();
-
-                    createDataEntry(dataSplit, dataEntry, currentPageNumber, pageOffset);
-                    pageOffset += writeDataEntry(os, dataEntry, pageSize);
-
-                    if (maxRecordSize > pageSize)
-                    {
-                        // finish up page, add bytes to fill
-                        endPage(os, pageSize - pageOffset);
-                        ++currentPageNumber;
-
-                        pageOffset = 0;
+                    if (!dataSplit[3].equals("")){
+                        var index = new Index(Long.parseLong(dataSplit[3]), 0, 0);
+                        ds.addIndex(index);
                     }
+
+//                    DataEntry dataEntry = new DataEntry();
+//
+//                    createDataEntry(dataSplit, dataEntry, currentPageNumber, pageOffset);
+//                    pageOffset += writeDataEntry(os, dataEntry, pageSize);
+//
+//                    if (maxRecordSize > pageSize)
+//                    {
+//                        // finish up page, add bytes to fill
+//                        endPage(os, pageSize - pageOffset);
+//                        ++currentPageNumber;
+//
+//                        pageOffset = 0;
+//                    }
+
+                    if (lineNumber % 50000 == 0) {
+                        System.out.println("Written " + lineNumber + " lines.");
+                    }
+
                 }
             }
 
             bulkLoad();
-            endPage(os, pageSize - pageOffset);
-            os.close();
+//            endPage(os, pageSize - pageOffset);
+//            os.close();
             long endTime = System.currentTimeMillis();
             // prints statistics at the end.
             System.out.println("Number of Records Inserted: " + (lineNumber - 1));
@@ -229,6 +239,8 @@ public class BPlusLoad {
 
     private void bulkLoad()
     {
+        System.out.println("Running BULK LOAD...");
+
         ExternalMergeSort ems = new ExternalMergeSort(ds.getIndexes());
         // last value in the list to be sorted
         int rightmost = ds.getIndexes().size() - 1;
@@ -252,8 +264,7 @@ public class BPlusLoad {
             if (arrayIndex == 0)
             {
                 // points to the next node (singly linked list)
-                LeafNode tempNode;
-                tempNode = node;
+                var tempNode = node;
                 node = new LeafNode();
                 tempNode.setNextNode(node);
             }
