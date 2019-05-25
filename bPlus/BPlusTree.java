@@ -2,13 +2,27 @@ package bPlus;
 
 public class BPlusTree
 {
-    private int degree = 3;
+    public static final int Degree = 3;
 
-    public int getDegree() {
-        return degree;
+    public BPlusTree() {
+
     }
 
-    public void setDegree(int degree) {
-        this.degree = degree;
+    private InternalNode rootNode;
+    public InternalNode getRootNode() { return rootNode; }
+
+    private LeafNode firstLeaf = new LeafNode();
+    public LeafNode getFirstLeaf() { return firstLeaf; }
+    public void setFirstLeaf(LeafNode leaf) { this.firstLeaf = leaf; }
+
+    public int getLeafCount() {
+        var node = firstLeaf;
+        var count = 0;
+        while (node != null) {
+            node = node.getNextNode();
+            ++count;
+        }
+        return count;
     }
+
 }

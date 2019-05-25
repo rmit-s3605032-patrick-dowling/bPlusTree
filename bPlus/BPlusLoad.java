@@ -57,8 +57,8 @@ public class BPlusLoad {
         {
             int lineNumber = 0;
             int currentPageNumber = 1;
-            final int maxRecordSize = 309;
-            int pageOffset = 0;
+//            final int maxRecordSize = 309;
+//            int pageOffset = 0;
 //            String fileName = "heap." + pageSize;
             BufferedReader reader = new BufferedReader(new FileReader(new File(dataFileName)));
 //            DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName));
@@ -72,7 +72,7 @@ public class BPlusLoad {
                     String[] dataSplit = data.split(",");
 
                     if (!dataSplit[3].equals("")){
-                        var index = new Index(Long.parseLong(dataSplit[3]), 0, 0);
+                        var index = new Index(Long.parseLong(dataSplit[3]), 0, 0); //todo
                         ds.addIndex(index);
                     }
 
@@ -91,7 +91,7 @@ public class BPlusLoad {
 //                    }
 
                     if (lineNumber % 50000 == 0) {
-                        System.out.println("Written " + lineNumber + " lines.");
+                        System.out.println("Processed " + lineNumber + " lines.");
                     }
 
                 }
@@ -100,7 +100,9 @@ public class BPlusLoad {
             bulkLoad();
 //            endPage(os, pageSize - pageOffset);
 //            os.close();
+
             long endTime = System.currentTimeMillis();
+
             // prints statistics at the end.
             System.out.println("Number of Records Inserted: " + (lineNumber - 1));
             System.out.println("Number of Pages Used: " + currentPageNumber);
@@ -245,22 +247,32 @@ public class BPlusLoad {
         // last value in the list to be sorted
         int rightmost = ds.getIndexes().size() - 1;
 
-        // runs merge sort to get all indexes in order
-        ems.sort(ds.getIndexes(), 0, rightmost);
+        System.out.println("First 10...");
+        var indexes = ds.getIndexes();
+        for (int i = 0; i < 10; ++i) {
+            System.out.println(indexes.get(i).getDurationSeconds());
+        }
 
-        BPlusTree bPlusTree = new BPlusTree();
+        // runs merge sort to get all indexes in order
+        System.out.println("Sorting...");
+        ems.sort(indexes, 0, rightmost);
+
+        System.out.println("First 10...");
+        for (int i = 0; i < 10; ++i) {
+            System.out.println(indexes.get(i).getDurationSeconds());
+        }
+
+        var bPlusTree = new BPlusTree();
+        var node = bPlusTree.getFirstLeaf();
 
         int indexLoaded = 0;
 
-        // initialises the leaf node container (will be used for all leaf nodes)
-        LeafNode node = new LeafNode();
-
-        // loops through all value in the datastore
-        for (Index nodeValue : ds.getIndexes())
+        // loops through all values in the data store
+        for (var index : indexes)
         {
             /* as the degree is the number of values the node can hold, this will calculate when a new leaf node is
             needed and is also used as the index for the array to insert the Node into*/
-            int arrayIndex = indexLoaded % bPlusTree.getDegree();
+            int arrayIndex = indexLoaded++ % BPlusTree.Degree;
             if (arrayIndex == 0)
             {
                 // points to the next node (singly linked list)
@@ -268,8 +280,25 @@ public class BPlusLoad {
                 node = new LeafNode();
                 tempNode.setNextNode(node);
             }
-            node.addValue(nodeValue, arrayIndex);
-            indexLoaded++;
+            node.addValue(index, arrayIndex);
         }
+
+        // rm empty node, from start:
+        bPlusTree.setFirstLeaf(bPlusTree.getFirstLeaf().getNextNode());
+
+        System.out.println("First 12...");
+        node = bPlusTree.getFirstLeaf();
+        for (int i = 0; i < 4; ++i) { // 4*3 = 12
+
+            for (var val : node.getValues()) {
+                System.out.println(val.getDurationSeconds());
+            }
+
+            node = node.getNextNode();
+
+        }
+
+        System.out.println("Leaf count: " + bPlusTree.getLeafCount());
+
     }
 }

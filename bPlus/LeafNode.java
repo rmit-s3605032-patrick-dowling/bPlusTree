@@ -9,11 +9,11 @@ public class LeafNode extends Node {
         this.nextNode = nextNode;
     }
 
-    public Node getNextNode() {
+    public LeafNode getNextNode() {
         return nextNode;
     }
 
-    private Index[] values = new Index[3];
+    private Index[] values = new Index[BPlusTree.Degree];
 
     public Index[] getValues() {
         return values;

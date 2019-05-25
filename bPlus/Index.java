@@ -1,7 +1,5 @@
 package bPlus;
 
-import data.*;
-
 public class Index
 {
     // index key
