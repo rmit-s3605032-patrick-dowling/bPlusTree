@@ -3,9 +3,7 @@ package bPlus;
 import data.*;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -272,7 +270,7 @@ public class BPlusLoad {
         {
             /* as the degree is the number of values the node can hold, this will calculate when a new leaf node is
             needed and is also used as the index for the array to insert the Node into*/
-            int arrayIndex = indexLoaded++ % BPlusTree.Degree;
+            int arrayIndex = indexLoaded++ % BPlusTree.Order;
             if (arrayIndex == 0)
             {
                 // points to the next node (singly linked list)
@@ -314,14 +312,6 @@ public class BPlusLoad {
 
 
             node = node.getNextNode();
-        }
-
-
-        var counter = 1666667;
-
-        while (counter > 0) {
-            System.out.println("HEIGHT: " + counter);
-            counter = counter / 4;
         }
 
 

@@ -2,7 +2,7 @@ package bPlus;
 
 public class BPlusTree
 {
-    public static final int Degree = 3;
+    public static final int Order = 3;
 
     public BPlusTree() {
 
