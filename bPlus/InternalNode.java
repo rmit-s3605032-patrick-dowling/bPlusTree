@@ -3,11 +3,7 @@ package bPlus;
 public class InternalNode extends Node
 {
 
-    public boolean IsRoot = false;
-
     private Node[] pointers = new Node[BPlusTree.Order + 1];
-//    private long[] keys = new long[BPlusTree.Order]; // use values
-
     public Node[] getPointers() { return pointers; }
 
     private int count = 1;
