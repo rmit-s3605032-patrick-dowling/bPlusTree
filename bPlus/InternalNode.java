@@ -27,4 +27,8 @@ public class InternalNode extends Node
         return new InternalNode(this, right);
     }
 
+    public InternalNode splitR(Node left) {
+        return new InternalNode(this, left);
+    }
+
 }

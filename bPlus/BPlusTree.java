@@ -6,6 +6,8 @@ public class BPlusTree
 {
     public static final int Order = 3;
 
+    private int Depth = 1; // 1 = leaves
+
     public BPlusTree(DataStore ds) {
         bulkLoad(ds.getIndexes());
     }
@@ -83,32 +85,59 @@ public class BPlusTree
         var leaf = firstLeaf.getNextNode().getNextNode(); // third
 
         var currentlyFilling = rootNode;
+//        var top = currentlyFilling;
+        var endOfDepths = new ArrayList<InternalNode>();
+
+        // depth = size() - 1
+        endOfDepths.add(null);     // 0 - nothing
+        endOfDepths.add(null);     // 1 = leaves
+        endOfDepths.add(rootNode); // 2 = root
 
         // ordered leaf loop:
         while (true) {
 
-            if (rootNode.IsFull()) { // split
+            if (currentlyFilling.IsFull()) {
 
-                if (currentlyFilling.IsFull()) { // this is only once at start, when currentlyFilling == rootNode
+                InternalNode top = null;
 
-                    currentlyFilling = new InternalNode(leaf, leaf.getNextNode());
-                    rootNode = rootNode.split(currentlyFilling);
-                    leaf = leaf.getNextNode(); // skip one
+                for (var i = 2; i < endOfDepths.size(); ++i) {
 
-                } else {
-                    currentlyFilling.add(leaf);
+                    var old = endOfDepths.get(i);
+
+                    if (old.IsFull()) {
+
+                        if (i == 2) {
+                            top = new InternalNode(leaf, leaf.getNextNode());
+                            currentlyFilling = top;
+                            endOfDepths.set(2, currentlyFilling);
+                            rootNode = top.splitR(old);
+                            endOfDepths.add(rootNode);
+                        } else {
+
+                        }
+
+                    } else {
+                        // old is root
+                        old.add(top);
+                    }
+
+//                    if (i == 2) {
+//                        top = new InternalNode(leaf, leaf.getNextNode());
+//                        currentlyFilling = top;
+//
+//                    } else {
+//                        if (old.IsFull()) {
+//                            top = top.splitR(old);
+//                        } else {
+//                            old.add(currentlyFilling);
+//                            break;
+//                        }
+//                    }
+
                 }
 
             } else {
-
-                if (currentlyFilling.IsFull()) { // split
-
-                    rootNode.add(currentlyFilling.split(leaf));
-
-                } else {
-                    currentlyFilling.add(leaf);
-                }
-
+                currentlyFilling.add(leaf);
             }
 
             // iterate
