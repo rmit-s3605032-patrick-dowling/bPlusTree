@@ -1,20 +1,24 @@
 package bPlus;
 
+import java.util.ArrayList;
+
 public class LeafNode extends Node {
 
     private LeafNode nextNode;
-    Index[] values = new Index[BPlusTree.Order];
+
+    ArrayList<Index> values = new ArrayList<Index>();
+
+    public void printNode()
+    {
+        for (Index index : this.values)
+        {
+            System.out.println(index.getDurationSeconds());
+        }
+    }
 
     public Node getPointerAt(int index)
     {
         return null;
-    }
-
-    private Index[] index = new Index[BPlusTree.Order];
-
-    public void setValues(Index[] values)
-    {
-        this.values = values;
     }
 
     public void setNextNode(LeafNode nextNode)
@@ -27,19 +31,24 @@ public class LeafNode extends Node {
         return nextNode;
     }
 
-    public Index[] getIndex()
+    public ArrayList<Index> getIndex()
     {
-        return index;
+        return values;
     }
 
-    public void setIndex(Index[] index)
+    public void setIndex(ArrayList<Index>  index)
     {
-        this.index = index;
+        this.values = index;
+    }
+
+    public void addValue(Index value)
+    {
+        values.add(value);
     }
 
     @Override
     public long getFirstValue()
     {
-        return index[0].getDurationSeconds();
+        return values.get(0).getDurationSeconds();
     }
 }

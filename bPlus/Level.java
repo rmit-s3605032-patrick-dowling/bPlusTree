@@ -1,35 +1,24 @@
 package bPlus;
 
+import java.util.ArrayList;
+
 public class Level
 {
     private Level nextLevel;
 
-
-    //TODO
     public int height;
 
-    private Node[] nodes = new Node[BPlusTree.Order];
+    private ArrayList<Node> nodes = new ArrayList<Node>();
 
     public Boolean isFull()
     {
-        if (this.nodes[BPlusTree.Order - 1] != null)
+        if (nodes.size() == BPlusTree.Order)
         {
             return true;
         }
         else
         {
             return false;
-        }
-    }
-
-    public void addValue(Node node)
-    {
-        for (int i = 0; i < nodes.length; i++)
-        {
-            if (this.nodes[i] == null)
-            {
-                this.nodes[i] = node;
-            }
         }
     }
 
@@ -45,12 +34,17 @@ public class Level
 
     public void wipe()
     {
-        this.nodes = new Node[BPlusTree.Order];
+        this.nodes = new ArrayList<Node>();
     }
 
-    public Node[] getNodes()
+    public ArrayList<Node> getNodes()
     {
         return this.nodes;
+    }
+
+    public void addNode(Node node)
+    {
+        nodes.add(node);
     }
 
 }

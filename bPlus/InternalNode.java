@@ -1,25 +1,41 @@
 package bPlus;
 
+import java.util.ArrayList;
+
 public class InternalNode extends Node
 {
 
     private long[] keys = new long[BPlusTree.Order];
 
-    private Node[] pointers = new Node[BPlusTree.Order + 1];
+    private ArrayList<Node> pointers = new ArrayList<Node>();
 
-    public Node[] getPointers()
+    public ArrayList<Node> getPointers()
     {
         return pointers;
     }
 
-    public Node getPointerAt(int index)
+    public  void printNode()
     {
-        return pointers[index];
+        for (long key : this.keys)
+        {
+            System.out.println(key);
+        }
     }
 
-    public void setPointers(Node[] values)
+    public Node getPointerAt(int index)
     {
-        this.pointers = values;
+        if (index > pointers.size())
+        {
+            return null;
+        }
+        else {
+            return pointers.get(index);
+        }
+    }
+
+    public void setPointers(ArrayList<Node> nodes)
+    {
+        this.pointers = nodes;
     }
 
     @Override
@@ -30,42 +46,7 @@ public class InternalNode extends Node
 
     public void setKeys()
     {
-        for (int i = 1; i < pointers.length - 1; i++)
-        {
-            this.keys[i - 1] = this.pointers[i].getFirstValue();
-        }
+        //TODO
     }
-
-//    private int count = 1;
-
-//    public boolean IsFull()
-//    {
-//        return count >= BPlusTree.Order;
-//    }
-//
-//    public InternalNode(Node left, Node right)
-//    {
-//        pointers[0] = left;
-//        values[0] = new Index(right.getFirstValue().getDurationSeconds(), 0, 0);
-//        pointers[count] = right;
-//    }
-//
-//    public void add(Node node)
-//    {
-//        pointers[count] = node;
-//        values[count++] = new Index(node.getFirstValue().getDurationSeconds(), 0, 0);
-//    }
-//
-//    public InternalNode split(Node right)
-//    {
-//        return new InternalNode(this, right);
-//    }
-//
-//    public InternalNode splitR(Node left)
-//    {
-//        return new InternalNode(this, left);
-//    }
-
-
 
 }

@@ -95,7 +95,7 @@ public class BPlusLoad {
                 }
             }
 
-            var btree = new BPlusTree(ds);
+            //var btree = new BPlusTree(ds);
 //            endPage(os, pageSize - pageOffset);
 //            os.close();
 
