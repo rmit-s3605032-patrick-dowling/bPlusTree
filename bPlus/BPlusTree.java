@@ -1,6 +1,7 @@
 package bPlus;
 
 import java.util.ArrayList;
+import data.*;
 
 public class BPlusTree {
     public static final int Order = 3;
@@ -13,12 +14,11 @@ public class BPlusTree {
 
     private Node rootNode = null;
 
-//    // entry to linked list:
-//    private LeafNode firstLeaf;
+    // entry to linked list:
 
-    public int getLeafCount() {
-        var node = firstLeaf;
-        var count = 0;
+    public int getLeafCount(LeafNode firstLeaf) {
+        LeafNode node = firstLeaf;
+        var count = 1;
         while (node != null) {
             node = node.getNextNode();
             ++count;
@@ -30,9 +30,9 @@ public class BPlusTree {
     {
         Node currentNode = rootNode;
         int count = 0;
-        while(currentNode.pointers[0] != null)
+        while(currentNode.getPointerAt(0) != null)
         {
-            currentNode = currentNode.pointers[0];
+            currentNode = currentNode.getPointerAt(0);
             count++;
         }
         return count;
@@ -56,6 +56,7 @@ public class BPlusTree {
         int count = 0;
         var currentValues = new Index[Order];
         var currentNode = new LeafNode();
+        LeafNode firstLeaf = new LeafNode();
 
         // loops through all values in the data store, and init the bottom leaves:
         for (var index : indexes) {
@@ -77,15 +78,19 @@ public class BPlusTree {
                 // initialise the first leaf to become the root node temporarily
                 if (rootNode == null) {
                     rootNode = currentNode;
+                    firstLeaf = currentNode;
                 }
             }
         }
 
-        buildTree(rootNode);
+
+        System.out.println("Leaf count: " + getLeafCount(firstLeaf));
+
+        buildTree(firstLeaf);
 
 
 
-        System.out.println("Leaf count: " + getLeafCount());
+
 
         /*
          * The first step is to sort the data entries according to a search key in ascending order.
@@ -169,39 +174,38 @@ public class BPlusTree {
 //        }
 
 
-        // TESTS:
-        Node node = rootNode;
-
-        while (true) {
-            ++count;
-            System.out.println(count);
-            try {
-                var next = (InternalNode) node;
-                node = next.getPointers()[1];
-            } catch (ClassCastException ex) {
-                var bottom = (LeafNode) node;
-                System.out.println(bottom.getFirstValue().getDurationSeconds());
-                break;
-            }
-        }
-
-        count = 1;
-        for (var v : rootNode.getPointers()[0].getValues()) {
-            System.out.println(count++ + " : " + v.getDurationSeconds());
-        }
+//        // TESTS:
+//        Node node = rootNode;
+//
+//        while (true) {
+//            ++count;
+//            System.out.println(count);
+//            try {
+//                var next = (InternalNode) node;
+//                node = next.getPointers()[1];
+//            } catch (ClassCastException ex) {
+//                var bottom = (LeafNode) node;
+//                System.out.println(bottom.getFirstValue().getDurationSeconds());
+//                break;
+//            }
+//        }
+//
+//        count = 1;
+//        for (var v : rootNode.getPointers()[0].getValues()) {
+//            System.out.println(count++ + " : " + v.getDurationSeconds());
+//        }
 
     }
 
     // used to build the tree from the leave nodes up.
-    private void buildTree(Node currentNode)
+    private void buildTree(LeafNode currentNode)
     {
-        currentLevel = new Level();
+        Level currentLevel = new Level();
+        currentLevel.height = 1;
         currentLevel.setNextLevel(new Level());
-        long nextKey;
-        // loop for the first level, aka the leaves level
         while (currentNode != null)
         {
-            for (int i = 0; i < Level.nodes.length; i++)
+            for (int i = 0; i < currentLevel.getNodes().length; i++)
             {
                 currentLevel.addValue(currentNode);
                 currentNode = currentNode.getNextNode();
@@ -211,19 +215,19 @@ public class BPlusTree {
         buildRoot(currentLevel);
     }
 
-    private Level increaseLevel(Level previousLevel)
+    private void increaseLevel(Level previousLevel)
     {
+        previousLevel.getNextLevel().height = previousLevel.height + 1;
+        System.out.println(previousLevel.height);
         InternalNode iNode = new InternalNode();
         iNode.setPointers(previousLevel.getNodes());
         iNode.setKeys();
 
         previousLevel.getNextLevel().addValue(iNode);
 
-        rootNode = previousLevel.getNextLevel();
-
-        if (previousLevel.getNextLevel().isFull() == true)
+        if (previousLevel.getNextLevel().isFull())
         {
-            increaseLevel(currentLevel.nextLevel());
+            increaseLevel(previousLevel.getNextLevel());
             previousLevel.getNextLevel().wipe();
         }
     }
@@ -234,7 +238,7 @@ public class BPlusTree {
         {
             currentLevel = currentLevel.getNextLevel();
         }
-        highestLevelNodes = currentLevel.getNodes();
+        Node[] highestLevelNodes = currentLevel.getNodes();
 
         if (highestLevelNodes[1] != null)
         {

@@ -3,6 +3,12 @@ package bPlus;
 public class LeafNode extends Node {
 
     private LeafNode nextNode;
+    Index[] values = new Index[BPlusTree.Order];
+
+    public Node getPointerAt(int index)
+    {
+        return null;
+    }
 
     private Index[] index = new Index[BPlusTree.Order];
 
@@ -11,7 +17,7 @@ public class LeafNode extends Node {
         this.values = values;
     }
 
-    public void setNextNode(Node nextNode)
+    public void setNextNode(LeafNode nextNode)
     {
         this.nextNode = nextNode;
     }

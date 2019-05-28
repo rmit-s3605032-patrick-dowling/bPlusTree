@@ -1,14 +1,18 @@
+package bPlus;
+
 public class Level
 {
     private Level nextLevel;
 
+
+    //TODO
     public int height;
 
-    private Node[] nodes = new Node[BPlusTree.degree];
+    private Node[] nodes = new Node[BPlusTree.Order];
 
     public Boolean isFull()
     {
-        if (this.nodes[BPlusTree.degree - 1] != null)
+        if (this.nodes[BPlusTree.Order - 1] != null)
         {
             return true;
         }
@@ -18,9 +22,15 @@ public class Level
         }
     }
 
-    public Boolean addValue(Node node)
+    public void addValue(Node node)
     {
-        for (int i = 0; i < nodes.length)
+        for (int i = 0; i < nodes.length; i++)
+        {
+            if (this.nodes[i] == null)
+            {
+                this.nodes[i] = node;
+            }
+        }
     }
 
     public Level getNextLevel()
@@ -35,11 +45,12 @@ public class Level
 
     public void wipe()
     {
-        this.nodes = new Node[BPlusTree.degree];
+        this.nodes = new Node[BPlusTree.Order];
     }
 
-    public void getNodes()
+    public Node[] getNodes()
     {
         return this.nodes;
     }
+
 }

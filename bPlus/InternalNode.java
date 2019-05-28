@@ -3,7 +3,7 @@ package bPlus;
 public class InternalNode extends Node
 {
 
-    private long[] keys = new long[BPlusTree.order];
+    private long[] keys = new long[BPlusTree.Order];
 
     private Node[] pointers = new Node[BPlusTree.Order + 1];
 
@@ -12,9 +12,14 @@ public class InternalNode extends Node
         return pointers;
     }
 
-    public void setPointers(Nodes[] values)
+    public Node getPointerAt(int index)
     {
-        this.values = values;
+        return pointers[index];
+    }
+
+    public void setPointers(Node[] values)
+    {
+        this.pointers = values;
     }
 
     @Override
@@ -23,31 +28,9 @@ public class InternalNode extends Node
         return keys[0];
     }
 
-    public void addKey(long key)
-    {
-        for (int i = 0; i < keys.length; i++)
-        {
-            if (keys[i] == null)
-            {
-                keys[i] = key;
-            }
-        }
-    }
-
-    public void addPointer(Nodes pointer)
-    {
-        for (int i = 0; i < pointers.length; i++)
-        {
-            if (pointers[i] == null)
-            {
-                pointers[i] = pointer;
-            }
-        }
-    }
-
     public void setKeys()
     {
-        for (int i = 1; i < pointers.length; i++)
+        for (int i = 1; i < pointers.length - 1; i++)
         {
             this.keys[i - 1] = this.pointers[i].getFirstValue();
         }
