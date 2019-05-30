@@ -1,20 +1,18 @@
 package bPlus;
 
 import java.util.ArrayList;
-import data.*;
 
 public class BPlusTree {
+
     public static final int Order = 3;
-
-//    private int Depth = 1; // 1 = leaves
-
+    private int depth = 0;
     private Node rootNode = null;
 
     // entry to linked list:
-
-    public int getLeafCount(LeafNode firstLeaf) {
+    public int getLeafCount(LeafNode firstLeaf)
+    {
         LeafNode node = firstLeaf;
-        var count = 0;
+        int count = 0;
         while (node != null) {
             node = node.getNextNode();
             ++count;
@@ -22,14 +20,19 @@ public class BPlusTree {
         return count;
     }
 
-    public int getDepth() {
+    public void setDepth() {
         Node currentNode = rootNode;
         int count = 0;
         while (currentNode.getPointerAt(0) != null) {
             currentNode = currentNode.getPointerAt(0);
             count++;
         }
-        return count;
+        this.depth = count;
+    }
+
+    public int getDepth()
+    {
+        return this.depth;
     }
 
     public Index query(long val) {
@@ -40,8 +43,6 @@ public class BPlusTree {
 
         System.out.println("Running BULK LOAD...");
 
-
-
         // runs merge sort to get all indexes in order
         System.out.println("Sorting...");
 
@@ -51,7 +52,7 @@ public class BPlusTree {
         var currentNode = new LeafNode();
         LeafNode firstLeaf = null;
 
-        // loops through all values in the data store, and init the bottom leaves:
+        // loops through all values in the data store, and init the bottom leaves
         for (Index index : indexes)
         {
             currentNode.addValue(index);
@@ -89,23 +90,34 @@ public class BPlusTree {
                 currentNode = currentNode.getNextNode();
             }
             while (currentLevel.getNodes().size() < BPlusTree.Order + 1);
+
             if (currentLevel.getNextLevel() == null)
             {
                 currentLevel.setNextLevel(new Level());
             }
             currentLevel = increaseLevel(currentLevel);
         }
+
+
+        /* used to set root to highest value. If multiple values on highest level, will build root 1 level
+        higher and assign the lower level values as it's children */
         buildRoot(currentLevel);
+        setDepth();
         System.out.println("Depth is: " + getDepth());
     }
 
+    /* recursive function called when moving up a level. Will add the values of the previous Level as pointers
+    * to the current level*/
     private Level increaseLevel(Level previousLevel)
     {
         Level currentLevel = previousLevel.getNextLevel();
+
         InternalNode iNode = new InternalNode();
+        // sets both pointers and keys for the internal node
         iNode.setValues(previousLevel.getNodes());
         currentLevel.addNode(iNode);
 
+        // when the current level has order + 1 values, increase the level again
         if (currentLevel.isFull()) {
             if (currentLevel.getNextLevel() == null)
             {
@@ -113,6 +125,7 @@ public class BPlusTree {
             }
             currentLevel = increaseLevel(currentLevel);
         }
+        // called right before recurring back. Will reset the previous level
         previousLevel.wipe();
 
         previousLevel.setNextLevel(currentLevel);
@@ -121,6 +134,7 @@ public class BPlusTree {
 
     private void buildRoot(Level currentLevel) {
 
+        // will keep going up until reaches highest level
         while (currentLevel.getNextLevel() != null)
         {
             currentLevel = currentLevel.getNextLevel();
@@ -133,7 +147,10 @@ public class BPlusTree {
             highestLevelNodes.add(node);
         }
 
+        /* if the highest level has multiple nodes, add another level and add those values as pointers
+        then assigns that value as the root of the tree */
         if (highestLevelNodes.size() > 1) {
+
             InternalNode iNode = new InternalNode();
 
             iNode.setValues(currentLevel.getNodes());

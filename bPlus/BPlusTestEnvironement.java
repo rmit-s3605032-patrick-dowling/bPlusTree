@@ -633,6 +633,10 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(60,0,0));
         indexes.add(new Index(70,0,0));
+        indexes.add(new Index(15,0,0));
+        indexes.add(new Index(15,0,0));
+        indexes.add(new Index(15,0,0));
+        indexes.add(new Index(15,0,0));
 
 
 

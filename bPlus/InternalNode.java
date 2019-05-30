@@ -1,17 +1,14 @@
 package bPlus;
 
 import java.util.ArrayList;
+import java.lang.Long;
 
 public class InternalNode extends Node
 {
-    private long[] keys = new long[BPlusTree.Order];
+
+    private ArrayList<Integer> keys = new ArrayList<Integer>();
 
     private ArrayList<Node> pointers = new ArrayList<Node>();
-
-    public ArrayList<Node> getPointers()
-    {
-        return pointers;
-    }
 
     public  void printNode()
     {
@@ -38,15 +35,14 @@ public class InternalNode extends Node
 
         for (int i = 1; i < this.pointers.size(); i++)
         {
-            keys[i - 1] = pointers.get(i).getFirstValue();
+            keys.add(i - 1, this.pointers.get(i).getFirstValue());
         }
     }
 
-
     @Override
-    public long getFirstValue()
+    public Integer getFirstValue()
     {
-        return keys[0];
+        return keys.get(0);
     }
 
 }

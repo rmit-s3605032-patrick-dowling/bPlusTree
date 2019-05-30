@@ -47,7 +47,7 @@ public class LeafNode extends Node {
     }
 
     @Override
-    public long getFirstValue()
+    public Integer getFirstValue()
     {
         return values.get(0).getDurationSeconds();
     }
