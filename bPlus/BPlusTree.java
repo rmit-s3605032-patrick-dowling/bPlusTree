@@ -72,7 +72,6 @@ public class BPlusTree {
         System.out.println("Leaf count: " + getLeafCount(firstLeaf));
 
         Level currentLevel = new Level();
-        currentLevel.setNextLevel(new Level());
 
         buildTree(firstLeaf, currentLevel);
     }
@@ -87,37 +86,31 @@ public class BPlusTree {
                     break;
                 }
                 currentLevel.addNode(currentNode);
-//                currentNode.printNode();
-//                System.out.println();
                 currentNode = currentNode.getNextNode();
             }
             while (currentLevel.getNodes().size() < BPlusTree.Order + 1);
+            if (currentLevel.getNextLevel() == null)
+            {
+                currentLevel.setNextLevel(new Level());
+            }
             currentLevel = increaseLevel(currentLevel);
         }
         buildRoot(currentLevel);
+        System.out.println("Depth is: " + getDepth());
     }
 
     private Level increaseLevel(Level previousLevel)
     {
         Level currentLevel = previousLevel.getNextLevel();
-        System.out.println("Level increased");
-
         InternalNode iNode = new InternalNode();
-
-        iNode.setPointers(previousLevel.getNodes());
-        iNode.setKeys();
-
+        iNode.setValues(previousLevel.getNodes());
         currentLevel.addNode(iNode);
 
-        for (Node node : currentLevel.getNodes())
-        {
-            node.printNode();
-        }
-
         if (currentLevel.isFull()) {
-            System.out.println("Scrabbleship increased");
-            currentLevel.setNextLevel(new Level());
-
+            if (currentLevel.getNextLevel() == null)
+            {
+                currentLevel.setNextLevel(new Level());
+            }
             currentLevel = increaseLevel(currentLevel);
         }
         previousLevel.wipe();
@@ -127,17 +120,25 @@ public class BPlusTree {
     }
 
     private void buildRoot(Level currentLevel) {
-        while (currentLevel.getNextLevel() != null) {
+
+        while (currentLevel.getNextLevel() != null)
+        {
             currentLevel = currentLevel.getNextLevel();
         }
-        ArrayList<Node> highestLevelNodes = currentLevel.getNodes();
+
+        ArrayList<Node> highestLevelNodes = new ArrayList<Node>();
+
+        for (Node node : currentLevel.getNodes())
+        {
+            highestLevelNodes.add(node);
+        }
 
         if (highestLevelNodes.size() > 1) {
             InternalNode iNode = new InternalNode();
 
-            iNode.setPointers(currentLevel.getNodes());
-            iNode.setKeys();
+            iNode.setValues(currentLevel.getNodes());
 
+            currentLevel.setNextLevel(new Level());
             currentLevel.getNextLevel().addNode(iNode);
 
             rootNode = iNode;

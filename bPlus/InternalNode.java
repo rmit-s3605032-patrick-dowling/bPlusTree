@@ -32,9 +32,14 @@ public class InternalNode extends Node
         }
     }
 
-    public void setPointers(ArrayList<Node> nodes)
+    public void setValues(ArrayList<Node> nodes)
     {
         this.pointers.addAll(nodes);
+
+        for (int i = 1; i < this.pointers.size(); i++)
+        {
+            keys[i - 1] = pointers.get(i).getFirstValue();
+        }
     }
 
 
@@ -44,11 +49,4 @@ public class InternalNode extends Node
         return keys[0];
     }
 
-    public void setKeys()
-    {
-        for (int i = 1; i < this.pointers.size(); i++)
-        {
-            keys[i - 1] = pointers.get(i).getFirstValue();
-        }
-    }
 }
