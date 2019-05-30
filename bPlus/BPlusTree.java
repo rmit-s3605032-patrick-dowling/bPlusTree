@@ -57,7 +57,7 @@ public class BPlusTree {
             currentNode.addValue(index);
             /* as the order is the number of values the node can hold, this will calculate when a new leaf node is
             needed and is also used as the index for the array to insert the Node into*/
-            if (currentNode.getIndex().size() == 3)
+            if (currentNode.getIndex().size() == BPlusTree.Order)
             {
                 // points to the next node (singly linked list)
                 currentNode.setNextNode(new LeafNode());
@@ -81,41 +81,48 @@ public class BPlusTree {
     private void buildTree(LeafNode currentNode, Level currentLevel) {
         while (currentNode != null)
         {
-            do
-            {
-                if (currentNode.getNextNode() == null)
+            do {
+                if (currentNode == null)
                 {
                     break;
                 }
-                else
-                {
-                    currentLevel.addNode(currentNode);
-                    currentNode.printNode();
-                    currentNode = currentNode.getNextNode();
-                }
+                currentLevel.addNode(currentNode);
+//                currentNode.printNode();
+//                System.out.println();
+                currentNode = currentNode.getNextNode();
             }
             while (currentLevel.getNodes().size() < BPlusTree.Order + 1);
             currentLevel = increaseLevel(currentLevel);
         }
-
-
-
         buildRoot(currentLevel);
     }
 
     private Level increaseLevel(Level previousLevel)
     {
+        Level currentLevel = previousLevel.getNextLevel();
+        System.out.println("Level increased");
+
         InternalNode iNode = new InternalNode();
 
         iNode.setPointers(previousLevel.getNodes());
-        //iNode.setKeys();
+        iNode.setKeys();
 
-        previousLevel.getNextLevel().addNode(iNode);
+        currentLevel.addNode(iNode);
 
-        if (previousLevel.getNextLevel().isFull()) {
-            increaseLevel(previousLevel.getNextLevel());
-            previousLevel.getNextLevel().wipe();
+        for (Node node : currentLevel.getNodes())
+        {
+            node.printNode();
         }
+
+        if (currentLevel.isFull()) {
+            System.out.println("Scrabbleship increased");
+            currentLevel.setNextLevel(new Level());
+
+            currentLevel = increaseLevel(currentLevel);
+        }
+        previousLevel.wipe();
+
+        previousLevel.setNextLevel(currentLevel);
         return previousLevel;
     }
 
@@ -129,14 +136,15 @@ public class BPlusTree {
             InternalNode iNode = new InternalNode();
 
             iNode.setPointers(currentLevel.getNodes());
-            //iNode.setKeys();
+            iNode.setKeys();
 
             currentLevel.getNextLevel().addNode(iNode);
 
             rootNode = iNode;
-        } else {
+        }
+        else
+        {
             rootNode = highestLevelNodes.get(0);
         }
     }
-
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Level
 {
-    private Level nextLevel;
+    private Level nextLevel = null;
 
     public int height;
 
@@ -12,7 +12,7 @@ public class Level
 
     public Boolean isFull()
     {
-        if (nodes.size() == BPlusTree.Order)
+        if (nodes.size() == BPlusTree.Order + 1)
         {
             return true;
         }
@@ -44,7 +44,7 @@ public class Level
 
     public void addNode(Node node)
     {
-        nodes.add(node);
+        this.nodes.add(node);
     }
 
 }

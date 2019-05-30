@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class InternalNode extends Node
 {
-
     private long[] keys = new long[BPlusTree.Order];
 
     private ArrayList<Node> pointers = new ArrayList<Node>();
@@ -35,8 +34,9 @@ public class InternalNode extends Node
 
     public void setPointers(ArrayList<Node> nodes)
     {
-        this.pointers = nodes;
+        this.pointers.addAll(nodes);
     }
+
 
     @Override
     public long getFirstValue()
@@ -46,7 +46,9 @@ public class InternalNode extends Node
 
     public void setKeys()
     {
-        //TODO
+        for (int i = 1; i < this.pointers.size(); i++)
+        {
+            keys[i - 1] = pointers.get(i).getFirstValue();
+        }
     }
-
 }
