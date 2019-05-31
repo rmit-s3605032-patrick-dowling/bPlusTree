@@ -6,7 +6,7 @@ import java.lang.Long;
 public class InternalNode extends Node
 {
 
-    private ArrayList<Integer> keys = new ArrayList<Integer>();
+    private long[] keys = new long[BPlusTree.Order];
 
     private ArrayList<Node> pointers = new ArrayList<Node>();
 
@@ -35,14 +35,40 @@ public class InternalNode extends Node
 
         for (int i = 1; i < this.pointers.size(); i++)
         {
-            keys.add(i - 1, this.pointers.get(i).getFirstValue());
+            // used to catch array out of bounds error for when there are no children.
+            try
+            {
+                keys[i - 1] = this.pointers.get(i).getFirstValue();
+            }
+            catch (IndexOutOfBoundsException iobe)
+            {
+                keys[i - 1] = this.pointers.get(i - 1).getLastValue();
+            }
         }
     }
 
     @Override
-    public Integer getFirstValue()
+    public long getFirstValue()
     {
-        return keys.get(0);
+        if (keys[0] == 0)
+        {
+            System.out.println("Someone fucked up");
+        }
+        return keys[0];
     }
+
+    public long getLastValue()
+    {
+        for (int i = keys.length; i > 0; i--)
+        {
+            if (keys[i] != 0)
+            {
+                return keys[i];
+            }
+        }
+        return 0;
+    }
+
+
 
 }

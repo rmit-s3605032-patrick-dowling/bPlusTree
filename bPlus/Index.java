@@ -3,7 +3,7 @@ package bPlus;
 public class Index
 {
     // index key
-    private int durationSeconds;
+    private long durationSeconds;
     // page number it is stored in
     private int page;
     // offset of the page
@@ -16,7 +16,7 @@ public class Index
         this.offset = offset;
     }
 
-    public int getDurationSeconds() {
+    public long getDurationSeconds() {
         return durationSeconds;
     }
 }

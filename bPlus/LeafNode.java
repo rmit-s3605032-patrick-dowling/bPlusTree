@@ -47,8 +47,13 @@ public class LeafNode extends Node {
     }
 
     @Override
-    public Integer getFirstValue()
+    public long getFirstValue()
     {
         return values.get(0).getDurationSeconds();
+    }
+
+    public long getLastValue()
+    {
+        return values.get(values.size() - 1).getDurationSeconds();
     }
 }

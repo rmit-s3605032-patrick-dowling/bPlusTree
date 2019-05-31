@@ -114,7 +114,10 @@ public class BPlusTree {
 
         InternalNode iNode = new InternalNode();
         // sets both pointers and keys for the internal node
-        iNode.setValues(previousLevel.getNodes());
+        if (previousLevel.getNodes().size() > 0)
+        {
+            iNode.setValues(previousLevel.getNodes());
+        }
         currentLevel.addNode(iNode);
 
         // when the current level has order + 1 values, increase the level again

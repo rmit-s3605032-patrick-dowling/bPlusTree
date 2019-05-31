@@ -37,7 +37,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -65,7 +65,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -107,7 +107,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -135,7 +135,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -177,7 +177,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -205,7 +205,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -247,7 +247,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -275,7 +275,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -317,7 +317,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -345,7 +345,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -387,7 +387,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -415,7 +415,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -457,7 +457,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -485,7 +485,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -527,7 +527,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -555,7 +555,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -597,7 +597,7 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
+        //indexes.add(new Index(0,0,0));
         indexes.add(new Index(3,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(15,0,0));
@@ -624,19 +624,39 @@ public class BPlusTestEnvironement {
         indexes.add(new Index(12,0,0));
         indexes.add(new Index(15,0,0));
         indexes.add(new Index(16,0,0));
+        indexes.add(new Index(90,0,0));
+        indexes.add(new Index(11,0,0));
+        indexes.add(new Index(12,0,0));
+        indexes.add(new Index(15,0,0));
+        indexes.add(new Index(16,0,0));
         indexes.add(new Index(13,0,0));
-        indexes.add(new Index(0,0,0));
-        indexes.add(new Index(3,0,0));
+        indexes.add(new Index(90,0,0));
+        indexes.add(new Index(11,0,0));
+        indexes.add(new Index(12,0,0));
         indexes.add(new Index(15,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(13,0,0));
+        indexes.add(new Index(90,0,0));
+        indexes.add(new Index(11,0,0));
+        indexes.add(new Index(12,0,0));
         indexes.add(new Index(15,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(13,0,0));
+        indexes.add(new Index(90,0,0));
+        indexes.add(new Index(11,0,0));
+        indexes.add(new Index(12,0,0));
         indexes.add(new Index(15,0,0));
-        indexes.add(new Index(15,0,0));
-        indexes.add(new Index(60,0,0));
-        indexes.add(new Index(70,0,0));
-        indexes.add(new Index(15,0,0));
-        indexes.add(new Index(15,0,0));
-        indexes.add(new Index(15,0,0));
-        indexes.add(new Index(15,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(16,0,0));
+        indexes.add(new Index(16,0,0));
+
+
+
+
 
 
 
