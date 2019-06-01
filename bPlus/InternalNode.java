@@ -6,13 +6,13 @@ import java.lang.Long;
 public class InternalNode extends Node
 {
 
-    private long[] keys = new long[BPlusTree.Order];
+    private String[] keys = new String[BPlusTree.Order];
 
     private ArrayList<Node> pointers = new ArrayList<Node>();
 
     public  void printNode()
     {
-        for (long key : this.keys)
+        for (String key : this.keys)
         {
             System.out.println(key);
         }
@@ -48,25 +48,25 @@ public class InternalNode extends Node
     }
 
     @Override
-    public long getFirstValue()
+    public String getFirstValue()
     {
-        if (keys[0] == 0)
+        if (keys[0] == null)
         {
             System.out.println("Someone fucked up");
         }
         return keys[0];
     }
 
-    public long getLastValue()
+    public String getLastValue()
     {
         for (int i = keys.length; i > 0; i--)
         {
-            if (keys[i] != 0)
+            if (keys[i] != null)
             {
                 return keys[i];
             }
         }
-        return 0;
+        return null;
     }
 
 

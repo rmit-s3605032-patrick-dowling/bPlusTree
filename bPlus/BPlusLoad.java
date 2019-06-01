@@ -91,7 +91,6 @@ public class BPlusLoad {
                     if (lineNumber % 50000 == 0) {
                         System.out.println("Processed " + lineNumber + " lines.");
                     }
-
                 }
             }
 
