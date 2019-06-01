@@ -70,7 +70,7 @@ public class BPlusLoad {
                     String[] dataSplit = data.split(",");
 
                     if (!dataSplit[3].equals("")){
-                        var index = new Index(Integer.parseInt(dataSplit[3]), 0, 0); //todo
+                        var index = new Index(Long.parseLong(dataSplit[3]), 0, 0); //todo
                         ds.addIndex(index);
                     }
 
@@ -116,7 +116,7 @@ public class BPlusLoad {
     private void createDataEntry(String[] dataSplit, DataEntry dataEntry, int pageNumber, int recordOffset)
     {
         // add index to the datastore
-        int durationSeconds = Integer.parseInt(dataSplit[3]);
+        long durationSeconds = Long.parseLong(dataSplit[3]);
         ds.addIndex(new Index(durationSeconds, pageNumber, recordOffset));
 
         // set device ID
