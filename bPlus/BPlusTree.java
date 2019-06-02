@@ -6,7 +6,7 @@ public class BPlusTree {
 
     public static final int Order = 3;
     private int depth = 0;
-    private Node rootNode = null;
+    private InternalNode rootNode = null;
     private LeafNode firstLeafNode;
 
     public LeafNode GetFirstLeaf() {
@@ -42,72 +42,168 @@ public class BPlusTree {
 
     public Index[] EqualitySearch(String value) {
 
-        try { // tests
+        try {
 
-            System.out.println("Leafs: ");
+            InternalNode node = rootNode;
+            int count = 0;
+            LeafNode bottom = null;
 
-            var count = 0;
-            Node node = GetFirstLeaf();
+            while (true) {
 
-            while (count < 12) {
                 System.out.println("Lvl: " + count);
-
                 node.printNode();
-                var vals = ((LeafNode)node).getIndex();
 
-                for (var v : vals) {
-                    System.out.print(v.getField() + " : ");
-                }
+                int index = 0;
 
-                node = ((LeafNode)node).getNextNode();
-                ++count;
-            }
-
-            System.out.println("From root: ");
-            node = rootNode;
-            count = 0;
-
-            while (count < 12) {
-
-                try {
-                    var test = (LeafNode)node;
-                    if (test.printNode()) {
+                for (var k : node.getKeys()) {
+                    if (k == null) {
                         break;
                     }
+                    if (k.compareTo(value) < 0) { // main comparison
+                        ++index;
+                    } else {
+                        break;
+                    }
+                }
+
+                try {
+                    var next = node.getPointerAt(index);
+                    node = (InternalNode)next; // iterates down the tree
                 } catch (ClassCastException ex) {
-                    // nothing
+                    bottom = (LeafNode)node.getPointerAt(index); // reached the bottom
+                    break;
                 }
 
-                System.out.println("Lvl: " + count);
-                System.out.println("F: " + node.getFirstValue() + " : L: " + node.getLastValue() + " |");
-                node = node.getPointerAt(1);
                 ++count;
+
             }
 
-            count = 0;
+            if (bottom == null) {
+                System.out.println("Search error");
+                return null;
+            }
 
-            while (count < 12) {
+            bottom.printNode();
+            System.out.println("Bottom: " + count);
 
-                node.printNode();
-                var vals = ((LeafNode)node).getIndex();
+            var result = new ArrayList<Index>();
 
-                for (var v : vals) {
-                    System.out.print(v.getField() + " : ");
+            while (bottom != null) {
+
+                for (var i : bottom.getIndex()) {
+
+                    if (i.getField().compareTo(value) < 0) {
+                        result.add(i);
+                    } else {
+                        System.out.println("Finished search. Count: " + count);
+                        bottom = null;
+                        break;
+                    }
                 }
 
-                node = ((LeafNode)node).getNextNode();
-                ++count;
+                if (bottom == null) {
+                    break;
+                }
+
+                bottom = bottom.getNextNode();
+
             }
+
+            System.out.println("Finished search. Final Count: " + result.size());
+            return (Index[])result.toArray();
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return null; //todo
+        System.out.println("Search error");
+        return null; // error
     }
 
     public Index[] RangeSearch(String left, String right) {
-        return null; //todo
+
+        try {
+
+            if (left.compareTo(right) > 0) {
+                System.out.println("Search error. Left is greater than right.");
+                return null;
+            }
+
+            InternalNode node = rootNode;
+            int count = 0;
+            LeafNode bottom = null;
+
+            while (true) {
+
+                System.out.println("Lvl: " + count);
+                node.printNode();
+
+                int index = 0;
+
+                for (var k : node.getKeys()) {
+                    if (k == null) {
+                        break;
+                    }
+                    if (k.compareTo(left) < 0) { // main comparison
+                        ++index;
+                    } else {
+                        break;
+                    }
+                }
+
+                try {
+                    var next = node.getPointerAt(index);
+                    node = (InternalNode)next; // iterates down the tree
+                } catch (ClassCastException ex) {
+                    bottom = (LeafNode)node.getPointerAt(index); // reached the bottom
+                    break;
+                }
+
+                ++count;
+
+            }
+
+            if (bottom == null) {
+                System.out.println("Search error");
+                return null;
+            }
+
+            bottom.printNode();
+            System.out.println("Bottom: " + count);
+
+            var result = new ArrayList<Index>();
+
+            while (bottom != null) {
+
+                for (var i : bottom.getIndex()) {
+
+                    if (i.getField().compareTo(right) < 0) {
+                        result.add(i);
+                    } else {
+                        System.out.println("Finished search. Count: " + count);
+                        bottom = null;
+                        break;
+                    }
+                }
+
+                if (bottom == null) {
+                    break;
+                }
+
+                bottom = bottom.getNextNode();
+
+            }
+
+            System.out.println("Finished search. Final Count: " + result.size());
+            return (Index[])result.toArray();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        System.out.println("Search error");
+        return null; // error
+
     }
 
     public void bulkLoad(ArrayList<Index> indexes) {
@@ -216,12 +312,7 @@ public class BPlusTree {
             currentLevel = currentLevel.getNextLevel();
         }
 
-        ArrayList<Node> highestLevelNodes = new ArrayList<Node>();
-
-        for (Node node : currentLevel.getNodes())
-        {
-            highestLevelNodes.add(node);
-        }
+        ArrayList<Node> highestLevelNodes = new ArrayList<>(currentLevel.getNodes());
 
         /* if the highest level has multiple nodes, add another level and add those values as pointers
         then assigns that value as the root of the tree */
@@ -238,7 +329,7 @@ public class BPlusTree {
         }
         else
         {
-            rootNode = highestLevelNodes.get(0);
+            rootNode = (InternalNode)highestLevelNodes.get(0);
         }
     }
 }

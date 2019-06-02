@@ -6,7 +6,7 @@ import java.lang.Long;
 public class InternalNode extends Node
 {
     private String[] keys = new String[BPlusTree.Order];
-    private ArrayList<Node> pointers = new ArrayList<Node>();
+    private ArrayList<Node> pointers = new ArrayList<>();
 
     public boolean printNode()
     {
@@ -45,6 +45,10 @@ public class InternalNode extends Node
             }
         }
     }
+
+    public String[] getKeys() {
+        return keys;
+}
 
     @Override
     public String getFirstValue()

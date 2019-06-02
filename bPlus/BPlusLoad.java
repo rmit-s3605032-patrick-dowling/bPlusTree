@@ -19,10 +19,10 @@ public class BPlusLoad {
         btree.bulkLoad(ds.getIndexes());
 
         System.out.println("Equality search...");
-        btree.EqualitySearch("0");
+        btree.EqualitySearch("1386E");
 
-        System.out.println("Range search...");
-        btree.RangeSearch("0", "1");
+//        System.out.println("Range search...");
+//        btree.RangeSearch("13383W", "1386E");
 
     }
 

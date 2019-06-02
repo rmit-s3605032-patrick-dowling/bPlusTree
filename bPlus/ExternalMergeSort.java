@@ -32,8 +32,8 @@ public class ExternalMergeSort {
         int leftSize = middle - leftmost + 1;
         int rightSize = rightmost - middle;
 
-        Index leftArray[] = new Index[leftSize];
-        Index rightArray[] = new Index[rightSize];
+        Index[] leftArray = new Index[leftSize];
+        Index[] rightArray = new Index[rightSize];
 
         // puts the values in their respective arrays left first then right
         for (int i=0; i < leftSize; i++)
