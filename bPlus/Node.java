@@ -6,7 +6,7 @@ public abstract class Node
 
     public abstract Node getPointerAt(int index);
 
-    public abstract void printNode();
+    public abstract boolean printNode();
 
     public abstract String getLastValue();
 }

@@ -53,7 +53,7 @@ public class ExternalMergeSort {
         // handles both arrays concurrently while both still have values
         while ((leftIndex < leftSize) && (rightIndex < rightSize))
         {
-            if (leftArray[leftIndex].getDurationSeconds().compareTo( rightArray[rightIndex].getDurationSeconds()) < 0)
+            if (leftArray[leftIndex].getField().compareTo( rightArray[rightIndex].getField()) < 0)
             {
                 indexes.set(mergeIndex, leftArray[leftIndex]);
                 leftIndex++;

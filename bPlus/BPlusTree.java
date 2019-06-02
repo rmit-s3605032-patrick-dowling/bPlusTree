@@ -7,6 +7,11 @@ public class BPlusTree {
     public static final int Order = 3;
     private int depth = 0;
     private Node rootNode = null;
+    private LeafNode firstLeafNode;
+
+    public LeafNode GetFirstLeaf() {
+        return firstLeafNode;
+    }
 
     // entry to linked list:
     public int getLeafCount(LeafNode firstLeaf)
@@ -35,7 +40,73 @@ public class BPlusTree {
         return this.depth;
     }
 
-    public Index query(long val) {
+    public Index[] EqualitySearch(String value) {
+
+        try { // tests
+
+            System.out.println("Leafs: ");
+
+            var count = 0;
+            Node node = GetFirstLeaf();
+
+            while (count < 12) {
+                System.out.println("Lvl: " + count);
+
+                node.printNode();
+                var vals = ((LeafNode)node).getIndex();
+
+                for (var v : vals) {
+                    System.out.print(v.getField() + " : ");
+                }
+
+                node = ((LeafNode)node).getNextNode();
+                ++count;
+            }
+
+            System.out.println("From root: ");
+            node = rootNode;
+            count = 0;
+
+            while (count < 12) {
+
+                try {
+                    var test = (LeafNode)node;
+                    if (test.printNode()) {
+                        break;
+                    }
+                } catch (ClassCastException ex) {
+                    // nothing
+                }
+
+                System.out.println("Lvl: " + count);
+                System.out.println("F: " + node.getFirstValue() + " : L: " + node.getLastValue() + " |");
+                node = node.getPointerAt(1);
+                ++count;
+            }
+
+            count = 0;
+
+            while (count < 12) {
+
+                node.printNode();
+                var vals = ((LeafNode)node).getIndex();
+
+                for (var v : vals) {
+                    System.out.print(v.getField() + " : ");
+                }
+
+                node = ((LeafNode)node).getNextNode();
+                ++count;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null; //todo
+    }
+
+    public Index[] RangeSearch(String left, String right) {
         return null; //todo
     }
 
@@ -75,6 +146,8 @@ public class BPlusTree {
         Level currentLevel = new Level();
 
         buildTree(firstLeaf, currentLevel);
+
+        firstLeafNode = firstLeaf;
     }
 
     // used to build the tree from the leave nodes up.

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 public class LeafNode extends Node {
 
     private LeafNode nextNode;
+    private ArrayList<Index> values = new ArrayList<>();
 
-    ArrayList<Index> values = new ArrayList<Index>();
-
-    public void printNode()
+    public boolean printNode()
     {
         for (Index index : this.values)
         {
-            System.out.println(index.getDurationSeconds());
+            System.out.println(index.getField());
         }
+        return true;
     }
 
     public Node getPointerAt(int index)
@@ -49,11 +49,11 @@ public class LeafNode extends Node {
     @Override
     public String getFirstValue()
     {
-        return values.get(0).getDurationSeconds();
+        return values.get(0).getField();
     }
 
     public String getLastValue()
     {
-        return values.get(values.size() - 1).getDurationSeconds();
+        return values.get(values.size() - 1).getField();
     }
 }

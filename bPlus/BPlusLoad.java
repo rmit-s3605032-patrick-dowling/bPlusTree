@@ -6,12 +6,24 @@ import java.io.*;
 
 public class BPlusLoad {
 
-    private DataStore ds = new DataStore();
+    private static DataStore ds = new DataStore();
 
     public static void main(String[] args)
     {
         BPlusLoad bPlusLoad = new BPlusLoad();
         bPlusLoad.checkArgs(args);
+
+        System.out.println("Building tree...");
+
+        var btree = new BPlusTree();
+        btree.bulkLoad(ds.getIndexes());
+
+        System.out.println("Equality search...");
+        btree.EqualitySearch("0");
+
+        System.out.println("Range search...");
+        btree.RangeSearch("0", "1");
+
     }
 
     private void checkArgs(String[] args)
@@ -66,7 +78,7 @@ public class BPlusLoad {
                     String[] dataSplit = data.split(",");
 
                     if (!dataSplit[3].equals("")){
-                        var index = new Index(dataSplit[3], 0, 0); //todo
+                        var index = new Index(dataSplit[4], 0, 0); // [4] == StreetMarker
                         ds.addIndex(index);
                     }
 
@@ -102,11 +114,6 @@ public class BPlusLoad {
             System.out.println("Number of Pages Used: " + currentPageNumber);
             System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
 
-            System.out.println("Building tree...");
-
-            var btree = new BPlusTree();
-            btree.bulkLoad(ds.getIndexes());
-
         }
         catch (IOException ioe)
         {
@@ -117,9 +124,9 @@ public class BPlusLoad {
 
     private void createDataEntry(String[] dataSplit, DataEntry dataEntry, int pageNumber, int recordOffset)
     {
-        // add index to the datastore
-        String durationSeconds = dataSplit[3];
-        ds.addIndex(new Index(durationSeconds, pageNumber, recordOffset));
+        // add index to the data store
+        var field = dataSplit[4]; // [4] == StreetMarker
+        ds.addIndex(new Index(field, pageNumber, recordOffset));
 
         // set device ID
         dataEntry.setDeviceID(Integer.parseInt(dataSplit[0]));

@@ -6,15 +6,15 @@ import java.lang.Long;
 public class InternalNode extends Node
 {
     private String[] keys = new String[BPlusTree.Order];
-
     private ArrayList<Node> pointers = new ArrayList<Node>();
 
-    public void printNode()
+    public boolean printNode()
     {
         for (String key : this.keys)
         {
             System.out.println(key);
         }
+        return false;
     }
 
     public Node getPointerAt(int index)
