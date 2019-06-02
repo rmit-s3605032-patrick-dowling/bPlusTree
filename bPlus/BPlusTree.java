@@ -40,12 +40,17 @@ public class BPlusTree {
         return this.depth;
     }
 
-    public Index[] EqualitySearch(String value) {
+    public ArrayList<Index> EqualitySearch(String value) {
 
         try {
 
+            System.out.println("Search term: " + value);
+
+            long startTime = System.currentTimeMillis();
+
             InternalNode node = rootNode;
             int count = 0;
+            int ios = 0;
             LeafNode bottom = null;
 
             while (true) {
@@ -60,6 +65,7 @@ public class BPlusTree {
                         break;
                     }
                     if (k.compareTo(value) < 0) { // main comparison
+                        ++ios;
                         ++index;
                     } else {
                         break;
@@ -87,15 +93,17 @@ public class BPlusTree {
             System.out.println("Bottom: " + count);
 
             var result = new ArrayList<Index>();
+            count = 0;
 
             while (bottom != null) {
 
                 for (var i : bottom.getIndex()) {
 
                     if (i.getField().compareTo(value) < 0) {
+                        ++ios;
                         result.add(i);
                     } else {
-                        System.out.println("Finished search. Count: " + count);
+                        System.out.println("Finished search. Leaves searched: " + count);
                         bottom = null;
                         break;
                     }
@@ -106,11 +114,16 @@ public class BPlusTree {
                 }
 
                 bottom = bottom.getNextNode();
-
+                ++count;
             }
 
             System.out.println("Finished search. Final Count: " + result.size());
-            return (Index[])result.toArray();
+            System.out.println("Number of IO Operations: " + ios);
+
+            long endTime = System.currentTimeMillis();
+            System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
+
+            return result; // DONE
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -120,17 +133,22 @@ public class BPlusTree {
         return null; // error
     }
 
-    public Index[] RangeSearch(String left, String right) {
+    public ArrayList<Index> RangeSearch(String left, String right) {
 
         try {
+
+            System.out.println("Search term: Left: " + left + ", Right: " + right);
 
             if (left.compareTo(right) > 0) {
                 System.out.println("Search error. Left is greater than right.");
                 return null;
             }
 
+            long startTime = System.currentTimeMillis();
+
             InternalNode node = rootNode;
             int count = 0;
+            int ios = 0;
             LeafNode bottom = null;
 
             while (true) {
@@ -145,6 +163,7 @@ public class BPlusTree {
                         break;
                     }
                     if (k.compareTo(left) < 0) { // main comparison
+                        ++ios;
                         ++index;
                     } else {
                         break;
@@ -172,15 +191,17 @@ public class BPlusTree {
             System.out.println("Bottom: " + count);
 
             var result = new ArrayList<Index>();
+            count = 0;
 
             while (bottom != null) {
 
                 for (var i : bottom.getIndex()) {
 
                     if (i.getField().compareTo(right) < 0) {
+                        ++ios;
                         result.add(i);
                     } else {
-                        System.out.println("Finished search. Count: " + count);
+                        System.out.println("Finished search. Leaves searched: " + count);
                         bottom = null;
                         break;
                     }
@@ -191,11 +212,16 @@ public class BPlusTree {
                 }
 
                 bottom = bottom.getNextNode();
-
+                ++count;
             }
 
             System.out.println("Finished search. Final Count: " + result.size());
-            return (Index[])result.toArray();
+            System.out.println("Number of IO Operations: " + ios);
+
+            long endTime = System.currentTimeMillis();
+            System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
+
+            return result; // DONE
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -21,8 +21,8 @@ public class BPlusLoad {
         System.out.println("Equality search...");
         btree.EqualitySearch("1386E");
 
-//        System.out.println("Range search...");
-//        btree.RangeSearch("13383W", "1386E");
+        System.out.println("Range search...");
+        btree.RangeSearch("13383W", "1386E");
 
     }
 
@@ -106,12 +106,11 @@ public class BPlusLoad {
             endPage(os, pageSize - pageOffset);
             os.close();
 
-
-            long endTime = System.currentTimeMillis();
-
             // prints statistics at the end.
             System.out.println("Number of Records Inserted: " + (lineNumber - 1));
             System.out.println("Number of Pages Used: " + currentPageNumber);
+
+            long endTime = System.currentTimeMillis();
             System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
 
         }
