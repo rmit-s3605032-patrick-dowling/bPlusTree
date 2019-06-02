@@ -55,8 +55,8 @@ public class BPlusTree {
 
             while (true) {
 
-                System.out.println("Lvl: " + count);
-                node.printNode();
+//                System.out.println("Lvl: " + count);
+//                node.printNode();
 
                 int index = 0;
 
@@ -89,8 +89,8 @@ public class BPlusTree {
                 return null;
             }
 
-            bottom.printNode();
-            System.out.println("Bottom: " + count);
+//            bottom.printNode();
+//            System.out.println("Bottom: " + count);
 
             var result = new ArrayList<Index>();
             count = 0;
@@ -118,7 +118,7 @@ public class BPlusTree {
             }
 
             System.out.println("Finished search. Final Count: " + result.size());
-            System.out.println("Number of IO Operations: " + ios);
+//            System.out.println("Number of IO Operations: " + ios);
 
             long endTime = System.currentTimeMillis();
             System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
@@ -153,8 +153,8 @@ public class BPlusTree {
 
             while (true) {
 
-                System.out.println("Lvl: " + count);
-                node.printNode();
+//                System.out.println("Lvl: " + count);
+//                node.printNode();
 
                 int index = 0;
 
@@ -187,8 +187,8 @@ public class BPlusTree {
                 return null;
             }
 
-            bottom.printNode();
-            System.out.println("Bottom: " + count);
+//            bottom.printNode();
+//            System.out.println("Bottom: " + count);
 
             var result = new ArrayList<Index>();
             count = 0;
@@ -216,7 +216,7 @@ public class BPlusTree {
             }
 
             System.out.println("Finished search. Final Count: " + result.size());
-            System.out.println("Number of IO Operations: " + ios);
+//            System.out.println("Number of IO Operations: " + ios);
 
             long endTime = System.currentTimeMillis();
             System.out.println("Time Taken in Milliseconds " + (endTime - startTime));

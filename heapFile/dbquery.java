@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class dbquery
 {
 
+    private static boolean printed = false;
+
     public static void main(String args[])
     {
         dbquery dbquery = new dbquery();
@@ -26,13 +28,21 @@ public class dbquery
 
         int pageSize = 0;
         String text = null;
+        String arg = "";
         String type = "";
         
         try
         {
             type = args[0];
-            text = args[1];
-            pageSize = Integer.parseInt(args[2]);
+            arg = args[1];
+            text = args[2];
+
+            if (type.equalsIgnoreCase("range")) {
+                pageSize = Integer.parseInt(args[3]);
+            } else {
+                pageSize = Integer.parseInt(args[2]);
+            }
+
         }
         catch (ArrayIndexOutOfBoundsException oobException)
         {
@@ -47,7 +57,7 @@ public class dbquery
 
         if(type.equalsIgnoreCase("range") || type.equalsIgnoreCase("equality"))
         {
-            queryHeap(type, text, fileName, pageSize);
+            queryHeap(type, arg, text, fileName, pageSize);
         }
         else
         {
@@ -60,25 +70,27 @@ public class dbquery
     {
         System.out.println("Please enter the correct syntax: \njava dbquery [range/equality] [text] [pageSize]");
         System.out.println("Syntax for range should be as follows:");
-        System.out.println("java dbquery range gt500 4096");
-        System.out.println("java dbquery range lt500 4096\n");
+        System.out.println("java dbquery range gt 500 4096");
+        System.out.println("java dbquery range lt 500 4096\n");
         System.out.println("Where lt represents less than, gt represents greater than");
-        System.out.println("Please keep in mind the application only indexes on the durationSeconds field");
+        System.out.println("Please keep in mind the application only indexes on the StreetMarker field. split[4]");
         System.exit(1);
     }
 
-    public void queryHeap(String type, String text, String fileName, int pageSize)
+    public void queryHeap(String type, String arg, String text, String fileName, int pageSize)
     {
         try
         {
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName), pageSize);
             long startTime = System.currentTimeMillis();
             int pageNumber = 1;
-            while( input.available() > 0) 
+
+            while (input.available() > 0)
             {
-                readInPage(input, pageNumber, type, pageSize, text);
+                readInPage(input, pageNumber, type, arg, pageSize, text);
                 pageNumber++;
             }
+
             long endTime = System.currentTimeMillis();
             System.out.println("Total Time of Query: " + (endTime - startTime));
         }
@@ -90,7 +102,7 @@ public class dbquery
         
     }
 
-    public void readInPage(BufferedInputStream input, int pageNumber, String type, int pageSize, String text) throws IOException
+    public void readInPage(BufferedInputStream input, int pageNumber, String type, String arg, int pageSize, String text) throws IOException
     {
         byte[] line = input.readNBytes(pageSize);
         byte[] value = new byte[64];
@@ -98,16 +110,16 @@ public class dbquery
         int countSinceLastValue = 0;
         Data data = new Data();
         // used to store all matches
-        ArrayList<Data> matches = new ArrayList();
+        ArrayList<Data> matches = new ArrayList<>();
         // flag is just to prevent the query to be run multiple times when it is still gathering characters for deviceID.
         boolean flag = false;
         
         for (int i = 0; i < pageSize; i++)
         {
             // will query every 12 elements of the heap.
-            if (valueNumber % 13 == 0 && valueNumber != 0 && flag == false)
+            if (valueNumber % 13 == 0 && valueNumber != 0 && !flag)
             {
-                matches = runQuery(matches, type, text, data);
+                matches = runQuery(matches, type, arg, text, data);
                 flag = true;
             }
             // will search for the last value of the line, otherwise keep appending to the value
@@ -214,11 +226,11 @@ public class dbquery
         return value;
     }
 
-    public ArrayList<Data> runQuery(ArrayList<Data> matches, String type, String text, Data data)
+    public ArrayList<Data> runQuery(ArrayList<Data> matches, String type, String arg, String text, Data data)
     {
         if (type.equalsIgnoreCase("range"))
         {
-            return rangeQuery(matches, text, data);
+            return rangeQuery(matches, arg, text, data);
         }
         else
         {
@@ -228,31 +240,45 @@ public class dbquery
 
     public ArrayList<Data> equalitySearch(ArrayList<Data> matches, String text, Data data)
     {
-        String durationSeconds = String.valueOf(data.durationSeconds);
+        var value = String.valueOf(data.streetMarker);
         
-        if (durationSeconds.trim().equalsIgnoreCase(text.trim()))
+        if (value.trim().equalsIgnoreCase(text.trim()))
         {
             matches.add(data);
         }
+
+        if (!printed) {
+            System.out.println("RECORD: ");
+
+            try {
+                var list = data.getClass().getFields();
+                for (var i : list) {
+                    System.out.println(i.getName() + " : " + i.get(data));
+                }
+            } catch(Exception ee) {
+                ee.printStackTrace();
+            }
+            printed = true;
+        }
+
         return matches;
     }
 
-    public ArrayList<Data> rangeQuery(ArrayList<Data> matches, String text, Data data)
+    public ArrayList<Data> rangeQuery(ArrayList<Data> matches, String arg, String text, Data data)
     {
-        long durationSeconds = data.durationSeconds;
+        var value = data.streetMarker;
+
         try
         {
-            long userInput = (long) Long.parseLong(text);
-
             if (text.substring(0, 1).equalsIgnoreCase("gt"))
             {
-                if (userInput > durationSeconds)
+                if (value.compareTo(text) > 0)
                 {
                     matches.add(data);
                 }
                 else if (text.substring(0, 1).equalsIgnoreCase("lt"))
                 {
-                    if (userInput < durationSeconds)
+                    if (value.compareTo(text) < 0)
                     {
                         matches.add(data);
                     }
