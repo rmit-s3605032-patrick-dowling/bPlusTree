@@ -1,0 +1,68 @@
+################################################################
+################################################################
+
+Running BULK LOAD...
+Sorting...
+Leaf count: 3333333
+Depth is: 11
+
+Equality search...
+Search term: 1386E
+Bottom: 10
+Finished search. Leaves searched: 1675
+Finished search. Final Count: 5027
+Number of IO Operations: 5054
+Time Taken in Milliseconds 5
+
+Range search...
+Search term: Left: 13383W, Right: 1386E
+Bottom: 10
+Finished search. Leaves searched: 247435
+Finished search. Final Count: 742307
+Number of IO Operations: 742334
+Time Taken in Milliseconds 97
+
+################################################################
+################################################################
+
+Running BULK LOAD...
+Sorting...
+Leaf count: 3333333
+Depth is: 11
+
+Equality search...
+Search term: 1386E
+Bottom: 10
+Finished search. Leaves searched: 1675
+Finished search. Final Count: 5027
+Time Taken in Milliseconds 3
+
+Range search...
+Search term: Left: 13383W, Right: 1386E
+Bottom: 10
+Finished search. Leaves searched: 247435
+Finished search. Final Count: 742307
+Time Taken in Milliseconds 85
+
+################################################################
+################################################################
+
+Running BULK LOAD...
+Sorting...
+Leaf count: 3333333
+Depth is: 11
+
+Equality search...
+Search term: 1386E
+Finished search. Leaves searched: 1675
+Finished search. Final Count: 5027
+Time Taken in Milliseconds 3
+
+Range search...
+Search term: Left: 13383W, Right: 1386E
+Finished search. Leaves searched: 247435
+Finished search. Final Count: 742307
+Time Taken in Milliseconds 87
+
+################################################################
+################################################################

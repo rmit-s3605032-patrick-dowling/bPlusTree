@@ -1,0 +1,39 @@
+HEAP Queries:
+
+################################################################
+
+equality 13383W 4096
+Total Time of Query: 6536 ms
+Total Time of Query: 7038 ms
+Total Time of Query: 7367 ms
+
+################################################################
+
+RECORD: 
+deviceID : 19711
+arrivalTime : 08/11/2017 02:19:50 PM                                          
+departureTime : 08/11/2017 07:12:02 PM                                          
+durationSeconds : 17532
+streetMarker : C6698                                                           
+sign : 2P MTR M-SAT 7:30-20:30                                         
+area : Titles                                                          
+streetID : 681
+streetName : FRANKLIN STREET                                                 
+betweenStreet1 : QUEEN STREET                                                    
+betweenStreet2 : ELIZABETH STREET                                                
+sideOfStreet : 1
+inViolation : F
+
+################################################################
+
+range gt 1386E 4096
+Total Time of Query: 7578 ms
+Total Time of Query: 6967 ms
+Total Time of Query: 6853 ms
+
+range lt 13383W 4096
+Total Time of Query: 7091 ms
+Total Time of Query: 6723 ms
+Total Time of Query: 6406 ms
+
+################################################################
