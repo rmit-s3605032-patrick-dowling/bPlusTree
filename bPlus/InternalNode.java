@@ -51,20 +51,21 @@ public class InternalNode extends Node
     {
         if (keys[0] == null)
         {
-            System.out.println("Someone fucked up");
+            System.out.println("First Key error");
         }
         return keys[0];
     }
 
     public String getLastValue()
     {
-        for (int i = keys.length; i > 0; i--)
+        for (int i = keys.length - 1; i > 0; i--)
         {
             if (keys[i] != null)
             {
                 return keys[i];
             }
         }
+        System.out.println("Last Key error");
         return null;
     }
 
