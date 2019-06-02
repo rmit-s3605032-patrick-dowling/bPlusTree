@@ -5,12 +5,11 @@ import java.lang.Long;
 
 public class InternalNode extends Node
 {
-
     private String[] keys = new String[BPlusTree.Order];
 
     private ArrayList<Node> pointers = new ArrayList<Node>();
 
-    public  void printNode()
+    public void printNode()
     {
         for (String key : this.keys)
         {
@@ -68,7 +67,5 @@ public class InternalNode extends Node
         }
         return null;
     }
-
-
 
 }

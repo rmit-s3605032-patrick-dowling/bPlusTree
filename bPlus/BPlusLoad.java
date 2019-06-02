@@ -2,11 +2,7 @@ package bPlus;
 
 import data.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public class BPlusLoad {
 
@@ -55,11 +51,11 @@ public class BPlusLoad {
         {
             int lineNumber = 0;
             int currentPageNumber = 1;
-//            final int maxRecordSize = 309;
-//            int pageOffset = 0;
-//            String fileName = "heap." + pageSize;
+            final int maxRecordSize = 309;
+            int pageOffset = 0;
+            String fileName = "heap." + pageSize;
             BufferedReader reader = new BufferedReader(new FileReader(new File(dataFileName)));
-//            DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName));
+            DataOutputStream os = new DataOutputStream(new FileOutputStream(fileName));
             long startTime = System.currentTimeMillis();
 
             for (String data = reader.readLine(); data != null; data = reader.readLine(), lineNumber++)
@@ -70,33 +66,34 @@ public class BPlusLoad {
                     String[] dataSplit = data.split(",");
 
                     if (!dataSplit[3].equals("")){
-                        var index = new Index(Long.parseLong(dataSplit[3]), 0, 0); //todo
+                        var index = new Index(dataSplit[3], 0, 0); //todo
                         ds.addIndex(index);
                     }
 
-//                    DataEntry dataEntry = new DataEntry();
-//
-//                    createDataEntry(dataSplit, dataEntry, currentPageNumber, pageOffset);
-//                    pageOffset += writeDataEntry(os, dataEntry, pageSize);
-//
-//                    if (maxRecordSize > pageSize)
-//                    {
-//                        // finish up page, add bytes to fill
-//                        endPage(os, pageSize - pageOffset);
-//                        ++currentPageNumber;
-//
-//                        pageOffset = 0;
-//                    }
+                    DataEntry dataEntry = new DataEntry();
+
+                    createDataEntry(dataSplit, dataEntry, currentPageNumber, pageOffset);
+                    pageOffset += writeDataEntry(os, dataEntry, pageSize);
+
+                    if (maxRecordSize > pageSize)
+                    {
+                        // finish up page, add bytes to fill
+                        endPage(os, pageSize - pageOffset);
+                        ++currentPageNumber;
+
+                        pageOffset = 0;
+                    }
 
                     if (lineNumber % 50000 == 0) {
                         System.out.println("Processed " + lineNumber + " lines.");
                     }
+
                 }
             }
 
-            //var btree = new BPlusTree(ds);
-//            endPage(os, pageSize - pageOffset);
-//            os.close();
+            endPage(os, pageSize - pageOffset);
+            os.close();
+
 
             long endTime = System.currentTimeMillis();
 
@@ -104,6 +101,12 @@ public class BPlusLoad {
             System.out.println("Number of Records Inserted: " + (lineNumber - 1));
             System.out.println("Number of Pages Used: " + currentPageNumber);
             System.out.println("Time Taken in Milliseconds " + (endTime - startTime));
+
+            System.out.println("Building tree...");
+
+            var btree = new BPlusTree();
+            btree.bulkLoad(ds.getIndexes());
+
         }
         catch (IOException ioe)
         {
@@ -115,7 +118,7 @@ public class BPlusLoad {
     private void createDataEntry(String[] dataSplit, DataEntry dataEntry, int pageNumber, int recordOffset)
     {
         // add index to the datastore
-        long durationSeconds = Long.parseLong(dataSplit[3]);
+        String durationSeconds = dataSplit[3];
         ds.addIndex(new Index(durationSeconds, pageNumber, recordOffset));
 
         // set device ID
