@@ -15,8 +15,6 @@ import java.util.ArrayList;
 public class dbquery
 {
 
-    private static boolean printed = false;
-
     public static void main(String args[])
     {
         dbquery dbquery = new dbquery();
@@ -245,20 +243,6 @@ public class dbquery
         if (value.trim().equalsIgnoreCase(text.trim()))
         {
             matches.add(data);
-        }
-
-        if (!printed) {
-            System.out.println("RECORD: ");
-
-            try {
-                var list = data.getClass().getFields();
-                for (var i : list) {
-                    System.out.println(i.getName() + " : " + i.get(data));
-                }
-            } catch(Exception ee) {
-                ee.printStackTrace();
-            }
-            printed = true;
         }
 
         return matches;
